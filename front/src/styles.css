@@ -245,40 +245,6 @@ textarea.input {
 /* ---------- Layout de Login y Registro ---------- */
 .pagina-auth {
   min-height: calc(100vh - 64px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.auth-lateral {
-  background: var(--degradado);
-  color: #fff;
-  padding: 60px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 18px;
-}
-
-.auth-lateral h1 {
-  font-size: 2.4rem;
-  font-weight: 800;
-}
-
-.auth-lateral p {
-  font-size: 1.05rem;
-  opacity: 0.92;
-  max-width: 380px;
-  margin: 0;
-}
-
-.auth-lateral ul {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-weight: 600;
 }
 
 .auth-formulario {
@@ -300,28 +266,13 @@ textarea.input {
 
 .auth-card h2 {
   font-size: 1.6rem;
-  margin-bottom: 6px;
-}
-
-.auth-card .subtitulo {
-  color: var(--texto-suave);
-  margin: 0 0 26px;
+  margin-bottom: 24px;
 }
 
 .auth-pie {
   text-align: center;
   margin: 20px 0 0;
   color: var(--texto-suave);
-}
-
-@media (max-width: 860px) {
-  .pagina-auth {
-    grid-template-columns: 1fr;
-  }
-
-  .auth-lateral {
-    display: none;
-  }
 }
 
 /* Input con boton adentro (ej: ver/ocultar contraseña) */

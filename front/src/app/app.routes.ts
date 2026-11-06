@@ -9,9 +9,9 @@ import { authGuard } from './guards/auth.guard';
 // Publicaciones y Mi perfil necesitan sesion (authGuard)
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login, title: 'Iniciar sesión · Nexo' },
-  { path: 'registro', component: Registro, title: 'Crear cuenta · Nexo' },
-  { path: 'publicaciones', component: Publicaciones, canActivate: [authGuard], title: 'Publicaciones · Nexo' },
-  { path: 'mi-perfil', component: MiPerfil, canActivate: [authGuard], title: 'Mi perfil · Nexo' },
+  { path: 'login', component: Login, title: 'Iniciar sesión · Red Social' },
+  { path: 'registro', component: Registro, title: 'Crear cuenta · Red Social' },
+  { path: 'publicaciones', component: Publicaciones, canActivate: [authGuard], title: 'Publicaciones · Red Social' },
+  { path: 'mi-perfil', component: MiPerfil, canActivate: [authGuard], title: 'Mi perfil · Red Social' },
   { path: '**', redirectTo: 'login' },
 ];
