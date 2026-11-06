@@ -1,8 +1,5 @@
 .diseno {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 24px;
-  align-items: start;
+  max-width: 680px;
 }
 
 .encabezado {
@@ -64,43 +61,4 @@
   margin-top: 24px;
   color: var(--texto-suave);
   font-weight: 600;
-}
-
-.lateral {
-  padding: 20px;
-  position: sticky;
-  top: 88px;
-}
-
-.lateral h3 {
-  margin-bottom: 14px;
-}
-
-.lateral ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.lateral li {
-  display: flex;
-  flex-direction: column;
-}
-
-.lateral span {
-  color: var(--texto-suave);
-  font-size: 0.85rem;
-}
-
-@media (max-width: 860px) {
-  .diseno {
-    grid-template-columns: 1fr;
-  }
-
-  .lateral {
-    display: none;
-  }
 }
