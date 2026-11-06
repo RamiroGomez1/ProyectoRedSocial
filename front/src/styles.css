@@ -1,0 +1,338 @@
+/* ===== Estilos globales: colores, tipografia y piezas reutilizables ===== */
+
+:root {
+  --primario: #4f46e5;
+  --primario-hover: #4338ca;
+  --primario-suave: #eef2ff;
+  --acento: #ec4899;
+  --exito: #16a34a;
+  --error: #dc2626;
+  --texto: #1e1b2e;
+  --texto-suave: #6b6880;
+  --borde: #e6e4f0;
+  --fondo: #f6f5fb;
+  --superficie: #ffffff;
+  --radio: 14px;
+  --sombra: 0 4px 24px rgba(30, 27, 46, 0.07);
+  --degradado: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--primario);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* ---------- Contenedor de pagina ---------- */
+.contenedor {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+/* ---------- Tarjeta ---------- */
+.card {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: var(--primario);
+  color: #fff;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: var(--primario-hover);
+}
+
+.btn-secundario {
+  background: var(--primario-suave);
+  color: var(--primario);
+}
+
+.btn-secundario:hover:not(:disabled) {
+  background: #e0e7ff;
+}
+
+.btn-fantasma {
+  background: transparent;
+  color: var(--texto-suave);
+}
+
+.btn-fantasma:hover:not(:disabled) {
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+.btn-bloque {
+  width: 100%;
+}
+
+/* ---------- Formularios ---------- */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.campo label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.campo .opcional {
+  color: var(--texto-suave);
+  font-weight: 400;
+}
+
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  font: inherit;
+  color: var(--texto);
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primario);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+.input.invalido {
+  border-color: var(--error);
+}
+
+.input.invalido:focus {
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.error-campo {
+  color: var(--error);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.ayuda {
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+}
+
+.fila-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+@media (max-width: 560px) {
+  .fila-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Avatar ---------- */
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--degradado);
+  color: #fff;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ---------- Spinner chico (para botones) ---------- */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Etiqueta "mockup" ---------- */
+.badge-mock {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ---------- Layout de Login y Registro ---------- */
+.pagina-auth {
+  min-height: calc(100vh - 64px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.auth-lateral {
+  background: var(--degradado);
+  color: #fff;
+  padding: 60px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+
+.auth-lateral h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+}
+
+.auth-lateral p {
+  font-size: 1.05rem;
+  opacity: 0.92;
+  max-width: 380px;
+  margin: 0;
+}
+
+.auth-lateral ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.auth-formulario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 36px 32px;
+}
+
+.auth-card.ancha {
+  max-width: 560px;
+}
+
+.auth-card h2 {
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+
+.auth-card .subtitulo {
+  color: var(--texto-suave);
+  margin: 0 0 26px;
+}
+
+.auth-pie {
+  text-align: center;
+  margin: 20px 0 0;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 860px) {
+  .pagina-auth {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-lateral {
+    display: none;
+  }
+}
+
+/* Input con boton adentro (ej: ver/ocultar contraseña) */
+.con-boton {
+  position: relative;
+}
+
+.con-boton .input {
+  padding-right: 84px;
+}
+
+.con-boton .ver {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.con-boton .ver:active {
+  transform: translateY(-50%) scale(0.98);
+}

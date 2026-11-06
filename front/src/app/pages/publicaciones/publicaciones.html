@@ -1,0 +1,56 @@
+<div class="contenedor diseno">
+  <section class="columna-principal">
+    <div class="encabezado">
+      <div>
+        <h1>Publicaciones</h1>
+        <span class="badge-mock">Mockup · datos de ejemplo</span>
+      </div>
+      <label class="orden">
+        Ordenar por
+        <select class="input" [value]="orden()" (change)="cambiarOrden($event)">
+          <option value="fecha">Más recientes</option>
+          <option value="meGusta">Más me gusta</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Formulario para publicar (se conecta en el Sprint 2) -->
+    <form class="card nueva" (submit)="publicar($event)">
+      <input class="input" placeholder="Título de tu publicación" />
+      <textarea class="input" placeholder="¿Qué querés compartir?"></textarea>
+      <div class="acciones-nueva">
+        <label class="btn btn-fantasma">
+          🖼️ Agregar imagen
+          <input type="file" accept="image/*" hidden />
+        </label>
+        <button class="btn btn-primario" type="submit">Publicar</button>
+      </div>
+    </form>
+
+    <div class="lista">
+      @for (post of visibles(); track post.id) {
+        <app-post-card [publicacion]="post" (meGusta)="alternarMeGusta($event)" />
+      }
+    </div>
+
+    <nav class="paginacion">
+      <button class="btn btn-secundario" [disabled]="pagina() === 1" (click)="pagina.set(pagina() - 1)">
+        ← Anterior
+      </button>
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+      <button class="btn btn-secundario" [disabled]="pagina() === totalPaginas()" (click)="pagina.set(pagina() + 1)">
+        Siguiente →
+      </button>
+    </nav>
+  </section>
+
+  <aside class="card lateral">
+    <h3>Tendencias</h3>
+    <ul>
+      <li><strong>#ProgramacionIV</strong><span>128 publicaciones</span></li>
+      <li><strong>#Angular</strong><span>94 publicaciones</span></li>
+      <li><strong>#NestJS</strong><span>61 publicaciones</span></li>
+      <li><strong>#Parciales</strong><span>40 publicaciones</span></li>
+    </ul>
+  </aside>
+</div>

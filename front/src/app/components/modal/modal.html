@@ -1,0 +1,25 @@
+@if (modal.datos(); as datos) {
+  <!-- Click en el fondo oscuro = cerrar -->
+  <div class="fondo" (click)="modal.cerrar()">
+    <div
+      class="ventana card"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="datos.titulo"
+      (click)="$event.stopPropagation()"
+    >
+      <div [class]="'icono ' + datos.tipo">
+        @switch (datos.tipo) {
+          @case ('exito') { ✓ }
+          @case ('error') { ! }
+          @default { i }
+        }
+      </div>
+      <h2>{{ datos.titulo }}</h2>
+      <p>{{ datos.mensaje }}</p>
+      <button class="btn btn-primario btn-bloque" (click)="modal.cerrar()">
+        {{ datos.textoBoton ?? 'Aceptar' }}
+      </button>
+    </div>
+  </div>
+}

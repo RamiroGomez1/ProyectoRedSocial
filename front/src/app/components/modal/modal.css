@@ -1,0 +1,65 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 17, 38, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: aparecer 0.15s ease-out;
+}
+
+.ventana {
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px 24px;
+  text-align: center;
+  animation: subir 0.2s ease-out;
+}
+
+.icono {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.icono.exito {
+  background: #dcfce7;
+  color: var(--exito);
+}
+
+.icono.error {
+  background: #fee2e2;
+  color: var(--error);
+}
+
+.icono.info {
+  background: var(--primario-suave);
+  color: var(--primario);
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+p {
+  color: var(--texto-suave);
+  margin: 0 0 24px;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; }
+}
+
+@keyframes subir {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+}

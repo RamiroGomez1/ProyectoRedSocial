@@ -1,0 +1,15 @@
+# dependencias y builds
+node_modules/
+dist/
+.angular/
+out-tsc/
+
+# claves (Mongo, Cloudinary): nunca se suben
+.env
+.env.*
+!.env.example
+
+# varios
+*.log
+.DS_Store
+.vercel

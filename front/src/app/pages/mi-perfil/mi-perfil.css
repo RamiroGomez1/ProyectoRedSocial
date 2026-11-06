@@ -1,0 +1,109 @@
+.contenedor {
+  max-width: 760px;
+}
+
+.perfil {
+  overflow: hidden;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+}
+
+.portada {
+  height: 140px;
+  background: var(--degradado);
+}
+
+.cabecera {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 0 28px;
+  margin-top: -48px;
+  flex-wrap: wrap;
+}
+
+.foto {
+  width: 112px;
+  height: 112px;
+  border: 4px solid #fff;
+  font-size: 2.2rem;
+}
+
+.nombres {
+  flex: 1;
+  padding-bottom: 8px;
+}
+
+.nombres h1 {
+  font-size: 1.6rem;
+}
+
+.usuario {
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.perfil-tag {
+  margin-bottom: 12px;
+  background: var(--primario-suave);
+  color: var(--primario);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.perfil-tag.admin {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.aviso,
+.descripcion {
+  margin: 18px 28px 0;
+}
+
+.aviso {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 22px 28px 0;
+}
+
+.datos div {
+  background: var(--fondo);
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
+dt {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.titulo-seccion {
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

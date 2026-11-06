@@ -1,0 +1,50 @@
+@let u = usuario();
+
+<div class="contenedor">
+  <section class="card perfil">
+    <div class="portada"></div>
+
+    <div class="cabecera">
+      @if (u.imagenPerfil) {
+        <img class="avatar foto" [src]="u.imagenPerfil" alt="Foto de perfil" />
+      } @else {
+        <span class="avatar foto">{{ u.nombre[0] }}{{ u.apellido[0] }}</span>
+      }
+      <div class="nombres">
+        <h1>{{ u.nombre }} {{ u.apellido }}</h1>
+        <span class="usuario">{{ '@' + u.nombreUsuario }}</span>
+      </div>
+      <span class="perfil-tag" [class.admin]="u.perfil === 'administrador'">{{ u.perfil }}</span>
+    </div>
+
+    @if (esMock()) {
+      <p class="aviso"><span class="badge-mock">Mockup</span> Iniciá sesión para ver tus datos reales.</p>
+    }
+
+    @if (u.descripcion) {
+      <p class="descripcion">{{ u.descripcion }}</p>
+    }
+
+    <dl class="datos">
+      <div>
+        <dt>Correo</dt>
+        <dd>{{ u.correo }}</dd>
+      </div>
+      <div>
+        <dt>Fecha de nacimiento</dt>
+        <dd>{{ u.fechaNacimiento | date: 'longDate' : 'UTC' }}</dd>
+      </div>
+      <div>
+        <dt>Miembro desde</dt>
+        <dd>{{ u.createdAt | date: 'MMMM y' }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <h2 class="titulo-seccion">Mis últimas publicaciones <span class="badge-mock">Mockup</span></h2>
+  <div class="lista">
+    @for (post of ultimasPublicaciones; track post.id) {
+      <app-post-card [publicacion]="post" [mostrarComentarios]="true" />
+    }
+  </div>
+</div>

@@ -1,0 +1,37 @@
+@let post = publicacion();
+
+<article class="card post">
+  <header>
+    <span class="avatar" style="width: 42px; height: 42px">{{ iniciales(post.autor.nombre) }}</span>
+    <div>
+      <strong>{{ post.autor.nombre }}</strong>
+      <span class="meta">{{ '@' + post.autor.nombreUsuario }} · {{ post.fecha | date: 'd MMM, HH:mm' }}</span>
+    </div>
+  </header>
+
+  <h3>{{ post.titulo }}</h3>
+  <p class="mensaje">{{ post.mensaje }}</p>
+
+  @if (post.imagen) {
+    <div [class]="'imagen ' + post.imagen" role="img" aria-label="Imagen de la publicación"></div>
+  }
+
+  <footer>
+    <button class="accion" [class.activa]="post.leDiMeGusta" (click)="meGusta.emit(post)">
+      {{ post.leDiMeGusta ? '♥' : '♡' }} {{ post.meGusta }}
+    </button>
+    <span class="accion">💬 {{ post.comentarios.length }}</span>
+  </footer>
+
+  @if (mostrarComentarios() && post.comentarios.length) {
+    <ul class="comentarios">
+      @for (comentario of post.comentarios; track $index) {
+        <li>
+          <strong>{{ '@' + comentario.autor }}</strong>
+          {{ comentario.mensaje }}
+          <span class="meta">{{ comentario.fecha | date: 'd MMM HH:mm' }}</span>
+        </li>
+      }
+    </ul>
+  }
+</article>

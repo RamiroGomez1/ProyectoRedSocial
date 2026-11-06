@@ -1,0 +1,114 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--borde);
+}
+
+.interior {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--texto);
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+nav a:not(.btn) {
+  color: var(--texto-suave);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+nav a:not(.btn):hover {
+  background: var(--fondo);
+  color: var(--texto);
+  text-decoration: none;
+}
+
+nav a.activo {
+  color: var(--primario);
+  background: var(--primario-suave);
+}
+
+.boton-registro {
+  padding: 8px 16px;
+  margin-left: 6px;
+}
+
+.boton-registro:hover {
+  text-decoration: none;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.hamburguesa {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--texto);
+}
+
+/* ---- Celular ---- */
+@media (max-width: 720px) {
+  .hamburguesa {
+    display: block;
+  }
+
+  nav {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: #fff;
+    border-bottom: 1px solid var(--borde);
+    padding: 12px 20px 16px;
+  }
+
+  nav.abierto {
+    display: flex;
+  }
+
+  .boton-registro,
+  .usuario {
+    margin-left: 0;
+  }
+
+  .usuario {
+    padding: 8px 14px;
+  }
+}

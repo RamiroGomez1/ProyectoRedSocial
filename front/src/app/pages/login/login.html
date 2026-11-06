@@ -1,0 +1,77 @@
+<section class="pagina-auth">
+  <aside class="auth-lateral">
+    <h1>Bienvenido de nuevo a Nexo</h1>
+    <p>Compartí lo que pensás, descubrí lo que publican los demás y sumate a la conversación.</p>
+  </aside>
+
+  <div class="auth-formulario">
+    <div class="card auth-card">
+      <h2>Iniciar sesión</h2>
+      <p class="subtitulo">Ingresá con tu correo o tu nombre de usuario.</p>
+
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+        <div class="campo">
+          <label for="identificador">Correo o nombre de usuario</label>
+          <input
+            id="identificador"
+            class="input"
+            formControlName="identificador"
+            placeholder="ej: juanperez o juan@mail.com"
+            autocomplete="username"
+            [class.invalido]="invalido('identificador')"
+          />
+          @if (invalido('identificador')) {
+            @if (form.controls.identificador.hasError('required')) {
+              <span class="error-campo">Este campo es obligatorio.</span>
+            } @else {
+              <span class="error-campo">Debe tener al menos 3 caracteres.</span>
+            }
+          }
+        </div>
+
+        <div class="campo">
+          <label for="password">Contraseña</label>
+          <div class="con-boton">
+            <input
+              id="password"
+              class="input"
+              [type]="verPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              [class.invalido]="invalido('password')"
+            />
+            <button
+              type="button"
+              class="btn btn-fantasma ver"
+              (click)="verPassword.set(!verPassword())"
+            >
+              {{ verPassword() ? 'Ocultar' : 'Ver' }}
+            </button>
+          </div>
+          @if (invalido('password')) {
+            @if (form.controls.password.hasError('required')) {
+              <span class="error-campo">Ingresá tu contraseña.</span>
+            } @else {
+              <span class="error-campo">
+                Debe tener al menos 8 caracteres, una mayúscula y un número.
+              </span>
+            }
+          }
+        </div>
+
+        <button type="submit" class="btn btn-primario btn-bloque" [disabled]="cargando()">
+          @if (cargando()) {
+            <span class="spinner"></span> Ingresando...
+          } @else {
+            Ingresar
+          }
+        </button>
+      </form>
+
+      <p class="auth-pie">
+        ¿No tenés cuenta? <a routerLink="/registro">Registrate</a>
+      </p>
+    </div>
+  </div>
+</section>

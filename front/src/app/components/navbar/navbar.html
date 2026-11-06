@@ -1,0 +1,32 @@
+<header class="navbar">
+  <div class="interior">
+    <a routerLink="/publicaciones" class="logo">
+      <img src="favicon.svg" alt="" width="32" height="32" />
+      <span>Nexo</span>
+    </a>
+
+    <button
+      class="hamburguesa"
+      (click)="menuAbierto.set(!menuAbierto())"
+      aria-label="Abrir menú"
+    >
+      ☰
+    </button>
+
+    <nav [class.abierto]="menuAbierto()" (click)="menuAbierto.set(false)">
+      <a routerLink="/publicaciones" routerLinkActive="activo">Publicaciones</a>
+      <a routerLink="/mi-perfil" routerLinkActive="activo">Mi perfil</a>
+
+      @if (auth.usuario(); as usuario) {
+        <span class="usuario">
+          <img class="avatar" [src]="usuario.imagenPerfil" alt="" width="30" height="30" />
+          {{ '@' + usuario.nombreUsuario }}
+        </span>
+        <button class="btn btn-fantasma" (click)="cerrarSesion()">Salir</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="activo">Ingresar</a>
+        <a routerLink="/registro" class="btn btn-primario boton-registro">Crear cuenta</a>
+      }
+    </nav>
+  </div>
+</header>
