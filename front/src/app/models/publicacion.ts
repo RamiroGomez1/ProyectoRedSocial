@@ -1,23 +1,52 @@
-// Modelo provisorio para los mockups del Sprint 1.
-// En el Sprint 2 se ajusta a lo que devuelva el back.
-export interface Comentario {
-  autor: string;
-  mensaje: string;
-  fecha: string;
+/** Tipos de datos de publicaciones, comentarios y respuestas del back. */
+// Formas de los datos que devuelve el back para publicaciones y comentarios
+
+export interface Autor {
+  _id: string;
+  nombre: string;
+  apellido: string;
+  nombreUsuario: string;
+  imagenPerfil: string;
 }
 
 export interface Publicacion {
-  id: string;
-  autor: {
-    nombre: string;
-    nombreUsuario: string;
-  };
+  _id: string;
   titulo: string;
   mensaje: string;
-  // Sin imagen real todavia: usamos un degradado de color como "foto"
-  imagen?: string;
-  fecha: string;
-  meGusta: number;
+  imagen: string;
+  autor: Autor;
+  cantidadMeGusta: number;
+  cantidadComentarios: number;
+  // Calculado por el back segun el usuario del token
   leDiMeGusta: boolean;
+  createdAt: string;
+}
+
+export interface Comentario {
+  _id: string;
+  mensaje: string;
+  autor: Autor;
+  modificado: boolean;
+  createdAt: string;
+}
+
+export type OrdenPublicaciones = 'fecha' | 'meGusta';
+
+export interface RespuestaPublicaciones {
+  publicaciones: Publicacion[];
+  total: number;
+  offset: number;
+  limit: number;
+}
+
+export interface RespuestaComentarios {
   comentarios: Comentario[];
+  total: number;
+  offset: number;
+  limit: number;
+}
+
+export interface RespuestaMeGusta {
+  cantidadMeGusta: number;
+  leDiMeGusta: boolean;
 }

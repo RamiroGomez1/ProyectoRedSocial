@@ -1,3 +1,4 @@
+/** Módulo de usuarios: registra el modelo Usuario y exporta su servicio. */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Usuario, UsuarioSchema } from './schemas/usuario.schema';

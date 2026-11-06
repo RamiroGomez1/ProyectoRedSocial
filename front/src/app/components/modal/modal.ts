@@ -1,3 +1,4 @@
+/** Componente que dibuja el modal global. */
 import { Component, HostListener, inject } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 

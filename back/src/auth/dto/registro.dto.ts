@@ -1,3 +1,4 @@
+/** DTO de registro: define y valida los datos que llegan al crear una cuenta. */
 import {
   IsDateString,
   IsEmail,

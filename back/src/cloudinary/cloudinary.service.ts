@@ -1,3 +1,4 @@
+/** Servicio que achica las imágenes con sharp y las sube a Cloudinary. */
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';

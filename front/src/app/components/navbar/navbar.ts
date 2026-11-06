@@ -1,3 +1,4 @@
+/** Barra de navegación superior. */
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -15,6 +16,7 @@ export class Navbar {
   // Menu desplegable en celulares
   protected menuAbierto = signal(false);
 
+  // Cierra la sesión y vuelve al login.
   cerrarSesion() {
     this.auth.cerrarSesion();
     this.menuAbierto.set(false);

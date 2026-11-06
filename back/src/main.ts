@@ -1,3 +1,4 @@
+/** Punto de entrada del back: crea la app Nest, configura CORS, el prefijo /api y la validación global. */
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';

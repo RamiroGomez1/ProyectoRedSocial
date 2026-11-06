@@ -1,3 +1,4 @@
+/** Módulo raíz: carga el .env, conecta con MongoDB y junta todos los módulos de la app. */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';

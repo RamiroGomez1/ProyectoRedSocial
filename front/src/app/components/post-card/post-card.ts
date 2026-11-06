@@ -1,8 +1,10 @@
+/** Tarjeta que muestra una publicación. */
 import { Component, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Publicacion } from '../../models/publicacion';
+import { Comentario, Publicacion } from '../../models/publicacion';
 
-// Cada publicacion es un componente (lo pide la consigna del Sprint 2)
+// Cada publicacion es un componente (lo pide la consigna del Sprint 2).
+// No llama al back: solo muestra y AVISA al padre con outputs.
 @Component({
   selector: 'app-post-card',
   imports: [DatePipe],
@@ -11,17 +13,18 @@ import { Publicacion } from '../../models/publicacion';
 })
 export class PostCard {
   publicacion = input.required<Publicacion>();
-  mostrarComentarios = input(false);
+  // Si viene, se muestran debajo (se usa en Mi perfil)
+  comentarios = input<Comentario[] | null>(null);
+  // El padre decide si se muestra el boton eliminar (autor o admin)
+  puedeEliminar = input(false);
+  // Mientras se procesa el me gusta, se deshabilita el boton
+  procesando = input(false);
 
-  // Avisa al padre que se toco "me gusta"
   meGusta = output<Publicacion>();
+  eliminar = output<Publicacion>();
 
-  iniciales(nombre: string): string {
-    return nombre
-      .split(' ')
-      .map((parte) => parte[0])
-      .slice(0, 2)
-      .join('')
-      .toUpperCase();
+  // Iniciales del autor, para cuando no tiene foto.
+  iniciales(nombre: string, apellido: string): string {
+    return `${nombre[0] ?? ''}${apellido[0] ?? ''}`.toUpperCase();
   }
 }

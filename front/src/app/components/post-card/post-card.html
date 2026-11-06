@@ -2,36 +2,59 @@
 
 <article class="card post">
   <header>
-    <span class="avatar" style="width: 42px; height: 42px">{{ iniciales(post.autor.nombre) }}</span>
-    <div>
-      <strong>{{ post.autor.nombre }}</strong>
-      <span class="meta">{{ '@' + post.autor.nombreUsuario }} · {{ post.fecha | date: 'd MMM, HH:mm' }}</span>
+    @if (post.autor.imagenPerfil) {
+      <img class="avatar" [src]="post.autor.imagenPerfil" alt="" width="42" height="42" />
+    } @else {
+      <span class="avatar" style="width: 42px; height: 42px">
+        {{ iniciales(post.autor.nombre, post.autor.apellido) }}
+      </span>
+    }
+    <div class="autor">
+      <strong>{{ post.autor.nombre }} {{ post.autor.apellido }}</strong>
+      <span class="meta">{{ '@' + post.autor.nombreUsuario }} · {{ post.createdAt | date: 'd MMM, HH:mm' }}</span>
     </div>
+
+    @if (puedeEliminar()) {
+      <button class="eliminar" title="Eliminar publicación" (click)="eliminar.emit(post)">🗑</button>
+    }
   </header>
 
   <h3>{{ post.titulo }}</h3>
   <p class="mensaje">{{ post.mensaje }}</p>
 
   @if (post.imagen) {
-    <div [class]="'imagen ' + post.imagen" role="img" aria-label="Imagen de la publicación"></div>
+    <img class="imagen" [src]="post.imagen" [alt]="post.titulo" loading="lazy" />
   }
 
   <footer>
-    <button class="accion" [class.activa]="post.leDiMeGusta" (click)="meGusta.emit(post)">
-      {{ post.leDiMeGusta ? '♥' : '♡' }} {{ post.meGusta }}
+    <button
+      class="accion"
+      [class.activa]="post.leDiMeGusta"
+      [disabled]="procesando()"
+      [attr.aria-pressed]="post.leDiMeGusta"
+      (click)="meGusta.emit(post)"
+    >
+      {{ post.leDiMeGusta ? '♥' : '♡' }} {{ post.cantidadMeGusta }} me gusta
     </button>
-    <span class="accion">💬 {{ post.comentarios.length }}</span>
+    <span class="accion">💬 {{ post.cantidadComentarios }}</span>
   </footer>
 
-  @if (mostrarComentarios() && post.comentarios.length) {
-    <ul class="comentarios">
-      @for (comentario of post.comentarios; track $index) {
-        <li>
-          <strong>{{ '@' + comentario.autor }}</strong>
-          {{ comentario.mensaje }}
-          <span class="meta">{{ comentario.fecha | date: 'd MMM HH:mm' }}</span>
-        </li>
-      }
-    </ul>
+  @if (comentarios(); as lista) {
+    @if (lista.length) {
+      <ul class="comentarios">
+        @for (comentario of lista; track comentario._id) {
+          <li>
+            <strong>{{ '@' + comentario.autor.nombreUsuario }}</strong>
+            {{ comentario.mensaje }}
+            <span class="meta">
+              {{ comentario.createdAt | date: 'd MMM HH:mm' }}
+              @if (comentario.modificado) { · editado }
+            </span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="sin-comentarios">Todavía no tiene comentarios.</p>
+    }
   }
 </article>

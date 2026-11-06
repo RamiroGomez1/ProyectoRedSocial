@@ -1,3 +1,4 @@
+/** Rutas de autenticación: POST /auth/registro y POST /auth/login. */
 import {
   BadRequestException,
   Body,

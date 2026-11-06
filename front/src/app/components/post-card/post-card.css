@@ -9,14 +9,32 @@ header {
   margin-bottom: 14px;
 }
 
-header div {
+.autor {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .meta {
   color: var(--texto-suave);
   font-size: 0.85rem;
+}
+
+.eliminar {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  opacity: 0.6;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.eliminar:hover {
+  opacity: 1;
+  background: #fee2e2;
 }
 
 h3 {
@@ -27,18 +45,19 @@ h3 {
 .mensaje {
   margin: 0 0 14px;
   color: #3d3a52;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 .imagen {
-  height: 240px;
+  display: block;
+  width: 100%;
+  max-height: 460px;
+  object-fit: cover;
   border-radius: 12px;
   margin-bottom: 14px;
+  background: var(--fondo);
 }
-
-/* "Fotos" de ejemplo hechas con degradados */
-.degradado-1 { background: linear-gradient(135deg, #818cf8, #c084fc 60%, #f472b6); }
-.degradado-2 { background: linear-gradient(180deg, #fb923c, #f43f5e 55%, #6d28d9); }
-.degradado-3 { background: linear-gradient(135deg, #0ea5e9, #22d3ee 50%, #a3e635); }
 
 footer {
   display: flex;
@@ -58,8 +77,16 @@ footer {
   cursor: pointer;
 }
 
-button.accion:hover {
+span.accion {
+  cursor: default;
+}
+
+button.accion:hover:not(:disabled) {
   background: var(--fondo);
+}
+
+button.accion:disabled {
+  opacity: 0.6;
 }
 
 .accion.activa {
@@ -81,10 +108,19 @@ button.accion:hover {
   padding: 10px 14px;
   border-radius: 10px;
   font-size: 0.92rem;
+  word-break: break-word;
 }
 
 .comentarios .meta {
   display: block;
   font-size: 0.78rem;
   margin-top: 2px;
+}
+
+.sin-comentarios {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--borde);
+  color: var(--texto-suave);
+  font-size: 0.9rem;
 }

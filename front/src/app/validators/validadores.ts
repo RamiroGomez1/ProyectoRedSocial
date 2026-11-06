@@ -1,3 +1,4 @@
+/** Validadores propios para los formularios. */
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 // Minimo 8 caracteres, al menos una mayuscula y un numero (igual que en el back)

@@ -1,3 +1,4 @@
+/** Componente raíz: muestra el navbar, la página actual y el modal global. */
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './components/navbar/navbar';

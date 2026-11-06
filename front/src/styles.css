@@ -118,6 +118,15 @@ h1, h2, h3 {
   color: var(--texto);
 }
 
+.btn-peligro {
+  background: var(--error);
+  color: #fff;
+}
+
+.btn-peligro:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
 .btn-bloque {
   width: 100%;
 }
@@ -335,4 +344,20 @@ textarea.input {
 
 .con-boton .ver:active {
   transform: translateY(-50%) scale(0.98);
+}
+
+/* ---------- Estados de carga / vacio ---------- */
+.estado {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--texto-suave);
+}
+
+.estado .spinner {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+  border-color: var(--primario-suave);
+  border-top-color: var(--primario);
+  margin: 0 auto 12px;
 }

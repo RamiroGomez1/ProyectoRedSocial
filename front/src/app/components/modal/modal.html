@@ -12,14 +12,25 @@
         @switch (datos.tipo) {
           @case ('exito') { ✓ }
           @case ('error') { ! }
+          @case ('confirmar') { ? }
           @default { i }
         }
       </div>
       <h2>{{ datos.titulo }}</h2>
       <p>{{ datos.mensaje }}</p>
-      <button class="btn btn-primario btn-bloque" (click)="modal.cerrar()">
-        {{ datos.textoBoton ?? 'Aceptar' }}
-      </button>
+
+      @if (datos.tipo === 'confirmar') {
+        <div class="botones">
+          <button class="btn btn-secundario" (click)="modal.cerrar()">Cancelar</button>
+          <button class="btn btn-peligro" (click)="modal.aceptar()">
+            {{ datos.textoBoton ?? 'Confirmar' }}
+          </button>
+        </div>
+      } @else {
+        <button class="btn btn-primario btn-bloque" (click)="modal.aceptar()">
+          {{ datos.textoBoton ?? 'Aceptar' }}
+        </button>
+      }
     </div>
   </div>
 }

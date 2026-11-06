@@ -1,23 +1,28 @@
+/** Lógica de autenticación: crea usuarios, valida el login y genera el token JWT. */
 import {
   ConflictException,
   ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsuariosService } from '../usuarios/usuarios.service';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { UsuarioDocument } from '../usuarios/schemas/usuario.schema';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
+import { PayloadToken } from './interfaces/payload.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usuariosService: UsuariosService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly jwtService: JwtService,
   ) {}
 
+  // Valida que no exista, encripta la contraseña, sube la foto y crea el usuario.
   async registro(dto: RegistroDto, imagen: Express.Multer.File) {
     // 1. Correo y nombre de usuario tienen que ser unicos -> 409 Conflict
     const repetido = await this.usuariosService.campoRepetido(
@@ -52,9 +57,11 @@ export class AuthService {
     return {
       mensaje: 'Usuario registrado correctamente',
       usuario: this.sinPassword(usuario),
+      token: this.generarToken(usuario),
     };
   }
 
+  // Busca el usuario, compara la contraseña y devuelve sus datos con el token.
   async login(dto: LoginDto) {
     const usuario = await this.usuariosService.buscarParaLogin(
       dto.identificador,
@@ -79,7 +86,18 @@ export class AuthService {
     return {
       mensaje: 'Inicio de sesion exitoso',
       usuario: this.sinPassword(usuario),
+      token: this.generarToken(usuario),
     };
+  }
+
+  // Firma un JWT con el id, el nombre de usuario y el perfil (vence a los 15 min)
+  private generarToken(usuario: UsuarioDocument): string {
+    const payload: PayloadToken = {
+      sub: usuario._id.toString(),
+      nombreUsuario: usuario.nombreUsuario,
+      perfil: usuario.perfil,
+    };
+    return this.jwtService.sign(payload);
   }
 
   // Nunca devolvemos la contraseña (ni hasheada) en una respuesta

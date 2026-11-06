@@ -1,3 +1,4 @@
+/** Página de inicio de sesión. */
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -31,6 +32,7 @@ export class Login {
     return control.invalid && control.touched;
   }
 
+  // Valida el formulario y hace el login.
   enviar() {
     if (this.form.invalid) {
       // Marca todo como tocado para que se vean los mensajes de error

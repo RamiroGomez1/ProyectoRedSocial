@@ -63,3 +63,14 @@ p {
 @keyframes subir {
   from { opacity: 0; transform: translateY(12px) scale(0.97); }
 }
+
+.icono.confirmar {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.botones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}

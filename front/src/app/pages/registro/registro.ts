@@ -1,3 +1,4 @@
+/** Página de registro de usuarios. */
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -60,11 +61,13 @@ export class Registro {
     { validators: camposIguales('password', 'repetirPassword') },
   );
 
+  // True si el campo tiene error y ya fue tocado (o se intentó enviar).
   invalido(campo: CampoRegistro): boolean {
     const control = this.form.controls[campo];
     return control.invalid && (control.touched || this.enviado());
   }
 
+  // True si el campo tiene ese error puntual.
   tieneError(campo: CampoRegistro, error: string): boolean {
     return this.form.controls[campo].hasError(error);
   }
@@ -95,6 +98,7 @@ export class Registro {
     this.vistaPrevia.set(URL.createObjectURL(archivo));
   }
 
+  // Valida el formulario, arma el FormData y registra al usuario.
   enviar() {
     this.enviado.set(true);
     if (!this.imagen()) {

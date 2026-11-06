@@ -3,7 +3,7 @@
     <div class="encabezado">
       <div>
         <h1>Publicaciones</h1>
-        <span class="badge-mock">Mockup · datos de ejemplo</span>
+        <span class="ayuda">{{ total() }} {{ total() === 1 ? 'publicación' : 'publicaciones' }}</span>
       </div>
       <label class="orden">
         Ordenar por
@@ -14,43 +14,94 @@
       </label>
     </div>
 
-    <!-- Formulario para publicar (se conecta en el Sprint 2) -->
-    <form class="card nueva" (submit)="publicar($event)">
-      <input class="input" placeholder="Título de tu publicación" />
-      <textarea class="input" placeholder="¿Qué querés compartir?"></textarea>
+    <!-- Nueva publicacion -->
+    <form class="card nueva" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
+      <div class="campo">
+        <input class="input" formControlName="titulo" placeholder="Título de tu publicación"
+          maxlength="100" [class.invalido]="invalido('titulo')" />
+        @if (invalido('titulo')) {
+          <span class="error-campo">El título es obligatorio.</span>
+        }
+      </div>
+      <div class="campo">
+        <textarea class="input" formControlName="mensaje" placeholder="¿Qué querés compartir?"
+          maxlength="1000" [class.invalido]="invalido('mensaje')"></textarea>
+        @if (invalido('mensaje')) {
+          <span class="error-campo">Escribí un mensaje.</span>
+        }
+      </div>
+
+      @if (vistaPrevia(); as url) {
+        <div class="preview">
+          <img [src]="url" alt="Vista previa" />
+          <button type="button" class="quitar" (click)="quitarImagen()" title="Quitar imagen">✕</button>
+        </div>
+      }
+
       <div class="acciones-nueva">
         <label class="btn btn-fantasma">
-          🖼️ Agregar imagen
-          <input type="file" accept="image/*" hidden />
+          🖼️ {{ imagen() ? 'Cambiar imagen' : 'Agregar imagen' }}
+          <input type="file" accept="image/*" hidden (change)="seleccionarImagen($event)" />
         </label>
-        <button class="btn btn-primario" type="submit">Publicar</button>
+        <button class="btn btn-primario" type="submit" [disabled]="publicando()">
+          @if (publicando()) {
+            <span class="spinner"></span> Publicando...
+          } @else {
+            Publicar
+          }
+        </button>
       </div>
     </form>
 
-    <div class="lista">
-      @for (post of visibles(); track post.id) {
-        <app-post-card [publicacion]="post" (meGusta)="alternarMeGusta($event)" />
-      }
-    </div>
+    <!-- Listado -->
+    @if (cargando()) {
+      <div class="estado"><div class="spinner"></div>Cargando publicaciones...</div>
+    } @else if (errorCarga(); as error) {
+      <div class="card estado">
+        <p>{{ error }}</p>
+        <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
+      </div>
+    } @else if (!publicaciones().length) {
+      <div class="card estado">
+        <p>Todavía no hay publicaciones. ¡Sé el primero en publicar algo!</p>
+      </div>
+    } @else {
+      <div class="lista">
+        @for (post of publicaciones(); track post._id) {
+          <app-post-card
+            [publicacion]="post"
+            [puedeEliminar]="puedeEliminar(post)"
+            [procesando]="enProceso().has(post._id)"
+            (meGusta)="alternarMeGusta($event)"
+            (eliminar)="eliminar($event)"
+          />
+        }
+      </div>
 
-    <nav class="paginacion">
-      <button class="btn btn-secundario" [disabled]="pagina() === 1" (click)="pagina.set(pagina() - 1)">
-        ← Anterior
-      </button>
-      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
-      <button class="btn btn-secundario" [disabled]="pagina() === totalPaginas()" (click)="pagina.set(pagina() + 1)">
-        Siguiente →
-      </button>
-    </nav>
+      @if (totalPaginas() > 1) {
+        <nav class="paginacion">
+          <button class="btn btn-secundario" [disabled]="pagina() === 1" (click)="irAPagina(pagina() - 1)">
+            ← Anterior
+          </button>
+          <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+          <button class="btn btn-secundario" [disabled]="pagina() === totalPaginas()" (click)="irAPagina(pagina() + 1)">
+            Siguiente →
+          </button>
+        </nav>
+      }
+    }
   </section>
 
-  <aside class="card lateral">
-    <h3>Tendencias</h3>
-    <ul>
-      <li><strong>#ProgramacionIV</strong><span>128 publicaciones</span></li>
-      <li><strong>#Angular</strong><span>94 publicaciones</span></li>
-      <li><strong>#NestJS</strong><span>61 publicaciones</span></li>
-      <li><strong>#Parciales</strong><span>40 publicaciones</span></li>
-    </ul>
-  </aside>
+  <!-- Tarjeta lateral con el usuario logueado -->
+  @if (auth.usuario(); as u) {
+    <aside class="card lateral">
+      <img class="avatar" [src]="u.imagenPerfil" alt="" width="64" height="64" />
+      <strong>{{ u.nombre }} {{ u.apellido }}</strong>
+      <span class="ayuda">{{ '@' + u.nombreUsuario }}</span>
+      @if (u.descripcion) {
+        <p>{{ u.descripcion }}</p>
+      }
+      <a routerLink="/mi-perfil" class="btn btn-secundario btn-bloque">Ver mi perfil</a>
+    </aside>
+  }
 </div>

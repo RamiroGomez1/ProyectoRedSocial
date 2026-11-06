@@ -1,3 +1,4 @@
+/** DTO de login: valida el usuario/correo y la contraseña recibidos. */
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class LoginDto {
