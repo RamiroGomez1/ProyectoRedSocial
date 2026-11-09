@@ -223,16 +223,6 @@ textarea.input {
   }
 }
 
-.badge-mock {
-  display: inline-block;
-  background: #fef3c7;
-  color: #92400e;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
-}
-
 .pagina-auth {
   min-height: calc(100vh - 64px);
 }

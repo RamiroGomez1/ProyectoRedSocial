@@ -59,14 +59,8 @@
   color: #be185d;
 }
 
-.aviso,
 .descripcion {
   margin: 18px 28px 0;
-}
-
-.aviso {
-  color: var(--texto-suave);
-  font-size: 0.9rem;
 }
 
 .datos {
