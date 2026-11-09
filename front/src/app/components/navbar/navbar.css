@@ -80,7 +80,6 @@ nav a.activo {
   color: var(--texto);
 }
 
-/* ---- Celular ---- */
 @media (max-width: 720px) {
   .hamburguesa {
     display: block;

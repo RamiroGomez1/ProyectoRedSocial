@@ -6,8 +6,6 @@ import { Publicacion } from '../../models/publicacion';
 
 type Orden = 'fecha' | 'meGusta';
 
-// MOCKUP del Sprint 1: todo funciona con datos locales.
-// En el Sprint 2 se conecta con GET /api/publicaciones
 @Component({
   selector: 'app-publicaciones',
   imports: [PostCard],
@@ -26,7 +24,6 @@ export class Publicaciones {
     Math.ceil(this.publicaciones().length / this.porPagina),
   );
 
-  // computed: se recalcula solo cuando cambia el orden, la pagina o la lista
   protected visibles = computed(() => {
     const ordenadas = [...this.publicaciones()].sort((a, b) =>
       this.orden() === 'fecha'

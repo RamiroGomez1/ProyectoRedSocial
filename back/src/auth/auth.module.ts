@@ -4,7 +4,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
-  // Importamos UsuariosModule para usar UsuariosService
   imports: [UsuariosModule],
   controllers: [AuthController],
   providers: [AuthService],

@@ -7,11 +7,9 @@ export interface DatosModal {
   titulo: string;
   mensaje: string;
   textoBoton?: string;
-  // Funcion opcional que se ejecuta al cerrar (ej: redirigir)
   alCerrar?: () => void;
 }
 
-// Reemplaza a alert(): cualquier componente puede abrir el modal global
 @Injectable({ providedIn: 'root' })
 export class ModalService {
   readonly datos = signal<DatosModal | null>(null);

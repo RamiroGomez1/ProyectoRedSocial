@@ -25,7 +25,6 @@ export class Login {
     password: ['', [Validators.required, passwordFuerte]],
   });
 
-  // true si el campo tiene error y el usuario ya lo toco
   invalido(campo: 'identificador' | 'password'): boolean {
     const control = this.form.controls[campo];
     return control.invalid && control.touched;
@@ -33,7 +32,6 @@ export class Login {
 
   enviar() {
     if (this.form.invalid) {
-      // Marca todo como tocado para que se vean los mensajes de error
       this.form.markAllAsTouched();
       return;
     }

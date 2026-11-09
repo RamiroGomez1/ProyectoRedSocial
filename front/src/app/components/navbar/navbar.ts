@@ -12,7 +12,6 @@ export class Navbar {
   protected auth = inject(AuthService);
   private router = inject(Router);
 
-  // Menu desplegable en celulares
   protected menuAbierto = signal(false);
 
   cerrarSesion() {

@@ -35,7 +35,6 @@ h3 {
   margin-bottom: 14px;
 }
 
-/* "Fotos" de ejemplo hechas con degradados */
 .degradado-1 { background: linear-gradient(135deg, #818cf8, #c084fc 60%, #f472b6); }
 .degradado-2 { background: linear-gradient(180deg, #fb923c, #f43f5e 55%, #6d28d9); }
 .degradado-3 { background: linear-gradient(135deg, #0ea5e9, #22d3ee 50%, #a3e635); }

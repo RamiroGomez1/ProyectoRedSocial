@@ -1,6 +1,5 @@
 export type Perfil = 'usuario' | 'administrador';
 
-// Forma de los datos de usuario que devuelve el back
 export interface Usuario {
   _id: string;
   nombre: string;

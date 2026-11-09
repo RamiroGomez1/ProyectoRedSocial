@@ -1,20 +1,18 @@
-/* ===== Estilos globales: colores, tipografia y piezas reutilizables ===== */
-
 :root {
-  --primario: #4f46e5;
-  --primario-hover: #4338ca;
-  --primario-suave: #eef2ff;
-  --acento: #ec4899;
+  --primario: #2563eb;
+  --primario-hover: #1d4ed8;
+  --primario-suave: #eff6ff;
+  --acento: #e11d48;
   --exito: #16a34a;
   --error: #dc2626;
-  --texto: #1e1b2e;
-  --texto-suave: #6b6880;
-  --borde: #e6e4f0;
-  --fondo: #f6f5fb;
+  --texto: #111827;
+  --texto-suave: #6b7280;
+  --borde: #e5e7eb;
+  --fondo: #f3f4f6;
   --superficie: #ffffff;
-  --radio: 14px;
-  --sombra: 0 4px 24px rgba(30, 27, 46, 0.07);
-  --degradado: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  --radio: 10px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --degradado: #2563eb;
 }
 
 * {
@@ -28,7 +26,7 @@ body {
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   background: var(--fondo);
   color: var(--texto);
   font-size: 15px;
@@ -51,14 +49,12 @@ h1, h2, h3 {
   line-height: 1.2;
 }
 
-/* ---------- Contenedor de pagina ---------- */
 .contenedor {
   max-width: 1040px;
   margin: 0 auto;
   padding: 28px 20px 60px;
 }
 
-/* ---------- Tarjeta ---------- */
 .card {
   background: var(--superficie);
   border: 1px solid var(--borde);
@@ -66,7 +62,6 @@ h1, h2, h3 {
   box-shadow: var(--sombra);
 }
 
-/* ---------- Botones ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -105,7 +100,7 @@ h1, h2, h3 {
 }
 
 .btn-secundario:hover:not(:disabled) {
-  background: #e0e7ff;
+  background: #dbeafe;
 }
 
 .btn-fantasma {
@@ -122,7 +117,6 @@ h1, h2, h3 {
   width: 100%;
 }
 
-/* ---------- Formularios ---------- */
 .campo {
   display: flex;
   flex-direction: column;
@@ -154,7 +148,7 @@ h1, h2, h3 {
 .input:focus {
   outline: none;
   border-color: var(--primario);
-  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 .input.invalido {
@@ -193,7 +187,6 @@ textarea.input {
   }
 }
 
-/* ---------- Avatar ---------- */
 .avatar {
   border-radius: 50%;
   object-fit: cover;
@@ -206,7 +199,6 @@ textarea.input {
   flex-shrink: 0;
 }
 
-/* ---------- Spinner chico (para botones) ---------- */
 .spinner {
   width: 16px;
   height: 16px;
@@ -222,7 +214,6 @@ textarea.input {
   }
 }
 
-/* ---------- Etiqueta "mockup" ---------- */
 .badge-mock {
   display: inline-block;
   background: #fef3c7;
@@ -233,7 +224,6 @@ textarea.input {
   border-radius: 999px;
 }
 
-/* ---------- Layout de Login y Registro ---------- */
 .pagina-auth {
   min-height: calc(100vh - 64px);
 }
@@ -266,7 +256,6 @@ textarea.input {
   color: var(--texto-suave);
 }
 
-/* Input con boton adentro (ej: ver/ocultar contraseña) */
 .con-boton {
   position: relative;
 }

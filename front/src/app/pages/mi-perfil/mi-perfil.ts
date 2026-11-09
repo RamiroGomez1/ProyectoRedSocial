@@ -4,9 +4,6 @@ import { PostCard } from '../../components/post-card/post-card';
 import { AuthService } from '../../services/auth.service';
 import { PUBLICACIONES_MOCK } from '../../models/datos-mock';
 
-// MOCKUP del Sprint 1.
-// Si hay un usuario logueado muestra sus datos reales; si no, datos de ejemplo.
-// Las "ultimas 3 publicaciones" se conectan al back en el Sprint 2.
 @Component({
   selector: 'app-mi-perfil',
   imports: [DatePipe, PostCard],

@@ -8,10 +8,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
-    // Lee el archivo .env y lo deja disponible en toda la app
     ConfigModule.forRoot({ isGlobal: true }),
 
-    // Conexion a MongoDB usando la URI del .env
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({

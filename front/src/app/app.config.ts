@@ -10,7 +10,6 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es-AR';
 import { routes } from './app.routes';
 
-// Para que el pipe date muestre las fechas en español
 registerLocaleData(localeEs);
 
 export const appConfig: ApplicationConfig = {

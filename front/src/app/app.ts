@@ -11,7 +11,6 @@ import { Modal } from './components/modal/modal';
     <main>
       <router-outlet />
     </main>
-    <!-- Un unico modal para toda la app, se controla con ModalService -->
     <app-modal />
   `,
 })

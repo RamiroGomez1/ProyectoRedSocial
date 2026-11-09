@@ -9,11 +9,8 @@ import {
   MinLength,
 } from 'class-validator';
 
-// Regla de la consigna: minimo 8 caracteres, una mayuscula y un numero
 export const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-// Los datos llegan como multipart/form-data (por la imagen),
-// asi que todos vienen como texto.
 export class RegistroDto {
   @IsString()
   @IsNotEmpty({ message: 'El nombre es obligatorio' })

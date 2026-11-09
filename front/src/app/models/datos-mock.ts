@@ -1,7 +1,5 @@
 import { Publicacion } from './publicacion';
 
-// Datos de ejemplo para los mockups del Sprint 1.
-// En el Sprint 2 se reemplazan por los que trae el back.
 export const PUBLICACIONES_MOCK: Publicacion[] = [
   {
     id: '1',

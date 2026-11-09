@@ -9,7 +9,6 @@ import { ModalService } from '../../services/modal.service';
 export class Modal {
   protected modal = inject(ModalService);
 
-  // Cerrar con la tecla Escape
   @HostListener('document:keydown.escape')
   alPresionarEscape() {
     if (this.modal.datos()) this.modal.cerrar();
