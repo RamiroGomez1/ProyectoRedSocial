@@ -1,4 +1,3 @@
-/** Punto de entrada del front: arranca la app Angular. */
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';

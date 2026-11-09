@@ -1,4 +1,3 @@
-/** Acceso a la colección de usuarios en MongoDB. */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,12 +9,10 @@ export class UsuariosService {
     @InjectModel(Usuario.name) private usuarioModel: Model<UsuarioDocument>,
   ) {}
 
-  // Guarda un usuario nuevo en la base.
   crear(datos: Partial<Usuario>): Promise<UsuarioDocument> {
     return this.usuarioModel.create(datos);
   }
 
-  // Devuelve que campo esta repetido (o null si ninguno)
   async campoRepetido(
     correo: string,
     nombreUsuario: string,
@@ -29,7 +26,6 @@ export class UsuariosService {
       : 'nombreUsuario';
   }
 
-  // Busca por correo O por nombre de usuario, trayendo tambien el password
   buscarParaLogin(identificador: string): Promise<UsuarioDocument | null> {
     return this.usuarioModel
       .findOne({

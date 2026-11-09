@@ -1,8 +1,6 @@
-/** DTO genérico de paginación (offset y limit). */
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
 
-// offset/limit genericos (se usa para los comentarios)
 export class PaginacionDto {
   @IsOptional()
   @Type(() => Number)

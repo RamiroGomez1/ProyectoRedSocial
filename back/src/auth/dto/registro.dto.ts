@@ -1,4 +1,3 @@
-/** DTO de registro: define y valida los datos que llegan al crear una cuenta. */
 import {
   IsDateString,
   IsEmail,
@@ -10,31 +9,28 @@ import {
   MinLength,
 } from 'class-validator';
 
-// Regla de la consigna: minimo 8 caracteres, una mayuscula y un numero
 export const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-// Los datos llegan como multipart/form-data (por la imagen),
-// asi que todos vienen como texto.
 export class RegistroDto {
-  @IsString()
+  @MaxLength(50, { message: 'El nombre puede tener hasta 50 caracteres' })
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
-  @MaxLength(50)
+  @IsString({ message: 'El nombre es obligatorio' })
   nombre: string;
 
-  @IsString()
+  @MaxLength(50, { message: 'El apellido puede tener hasta 50 caracteres' })
   @IsNotEmpty({ message: 'El apellido es obligatorio' })
-  @MaxLength(50)
+  @IsString({ message: 'El apellido es obligatorio' })
   apellido: string;
 
   @IsEmail({}, { message: 'El correo no es valido' })
   correo: string;
 
-  @IsString()
-  @MinLength(3, { message: 'El nombre de usuario debe tener al menos 3 caracteres' })
-  @MaxLength(20)
   @Matches(/^[a-zA-Z0-9._]+$/, {
     message: 'El nombre de usuario solo puede tener letras, numeros, punto y guion bajo',
   })
+  @MaxLength(20, { message: 'El nombre de usuario puede tener hasta 20 caracteres' })
+  @MinLength(3, { message: 'El nombre de usuario debe tener al menos 3 caracteres' })
+  @IsString({ message: 'El nombre de usuario es obligatorio' })
   nombreUsuario: string;
 
   @Matches(REGEX_PASSWORD, {
@@ -46,7 +42,7 @@ export class RegistroDto {
   fechaNacimiento: string;
 
   @IsOptional()
-  @IsString()
   @MaxLength(200, { message: 'La descripcion puede tener hasta 200 caracteres' })
+  @IsString({ message: 'La descripcion debe ser un texto' })
   descripcion?: string;
 }

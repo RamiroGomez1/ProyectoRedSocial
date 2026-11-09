@@ -1,4 +1,3 @@
-/** Servicio que achica las imágenes con sharp y las sube a Cloudinary. */
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
@@ -14,16 +13,11 @@ export class CloudinaryService {
     });
   }
 
-  /**
-   * Achica la imagen con sharp y la sube a Cloudinary.
-   * Devuelve la URL publica (https) de la imagen.
-   */
   async subirImagen(
     archivo: Express.Multer.File,
     carpeta: string,
     ancho = 800,
   ): Promise<string> {
-    // Redimensiona (sin agrandar) y convierte a webp para que pese menos
     const buffer = await sharp(archivo.buffer)
       .resize({ width: ancho, withoutEnlargement: true })
       .webp({ quality: 80 })

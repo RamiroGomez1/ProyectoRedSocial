@@ -1,4 +1,3 @@
-/** Módulo raíz: carga el .env, conecta con MongoDB y junta todos los módulos de la app. */
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -9,10 +8,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
-    // Lee el archivo .env y lo deja disponible en toda la app
     ConfigModule.forRoot({ isGlobal: true }),
 
-    // Conexion a MongoDB usando la URI del .env
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({

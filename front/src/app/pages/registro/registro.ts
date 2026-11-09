@@ -1,4 +1,3 @@
-/** Página de registro de usuarios. */
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -7,7 +6,7 @@ import { AuthService, mensajeDeError } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
 import { camposIguales, edadMinima, passwordFuerte } from '../../validators/validadores';
 
-const TAMANIO_MAXIMO = 2 * 1024 * 1024; // 2 MB
+const TAMANIO_MAXIMO = 2 * 1024 * 1024;
 
 type CampoRegistro =
   | 'nombre'
@@ -34,7 +33,6 @@ export class Registro {
   protected cargando = signal(false);
   protected enviado = signal(false);
 
-  // La imagen va aparte del FormGroup porque es un archivo
   protected imagen = signal<File | null>(null);
   protected vistaPrevia = signal<string | null>(null);
   protected errorImagen = signal<string | null>(null);
@@ -61,18 +59,15 @@ export class Registro {
     { validators: camposIguales('password', 'repetirPassword') },
   );
 
-  // True si el campo tiene error y ya fue tocado (o se intentó enviar).
   invalido(campo: CampoRegistro): boolean {
     const control = this.form.controls[campo];
     return control.invalid && (control.touched || this.enviado());
   }
 
-  // True si el campo tiene ese error puntual.
   tieneError(campo: CampoRegistro, error: string): boolean {
     return this.form.controls[campo].hasError(error);
   }
 
-  // Se ejecuta cuando el usuario elige un archivo en el input file
   seleccionarImagen(evento: Event) {
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0] ?? null;
@@ -92,13 +87,11 @@ export class Registro {
     }
 
     this.imagen.set(archivo);
-    // Genera una URL temporal para mostrar la vista previa
     const anterior = this.vistaPrevia();
     if (anterior) URL.revokeObjectURL(anterior);
     this.vistaPrevia.set(URL.createObjectURL(archivo));
   }
 
-  // Valida el formulario, arma el FormData y registra al usuario.
   enviar() {
     this.enviado.set(true);
     if (!this.imagen()) {
@@ -109,7 +102,6 @@ export class Registro {
       return;
     }
 
-    // Armamos un FormData: es la forma de mandar archivos por HTTP
     const valores = this.form.getRawValue();
     const datos = new FormData();
     datos.append('nombre', valores.nombre.trim());

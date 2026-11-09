@@ -1,4 +1,3 @@
-/** Página principal: crear y listar publicaciones. */
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -9,7 +8,7 @@ import { AuthService, mensajeDeError } from '../../services/auth.service';
 import { PublicacionesService } from '../../services/publicaciones.service';
 import { OrdenPublicaciones, Publicacion } from '../../models/publicacion';
 
-const TAMANIO_MAXIMO = 5 * 1024 * 1024; // 5 MB
+const TAMANIO_MAXIMO = 5 * 1024 * 1024;
 
 @Component({
   selector: 'app-publicaciones',
@@ -23,7 +22,6 @@ export class Publicaciones implements OnInit {
   private publicacionesService = inject(PublicacionesService);
   protected auth = inject(AuthService);
 
-  // ----- Listado -----
   protected readonly porPagina = 5;
   protected publicaciones = signal<Publicacion[]>([]);
   protected total = signal(0);
@@ -31,14 +29,12 @@ export class Publicaciones implements OnInit {
   protected pagina = signal(1);
   protected cargando = signal(true);
   protected errorCarga = signal<string | null>(null);
-  // Ids de publicaciones con un "me gusta" en curso (evita doble click)
   protected enProceso = signal<Set<string>>(new Set());
 
   protected totalPaginas = computed(() =>
     Math.max(1, Math.ceil(this.total() / this.porPagina)),
   );
 
-  // ----- Nueva publicacion -----
   protected publicando = signal(false);
   protected imagen = signal<File | null>(null);
   protected vistaPrevia = signal<string | null>(null);
@@ -47,12 +43,10 @@ export class Publicaciones implements OnInit {
     mensaje: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
-  // Al entrar a la página, carga las publicaciones.
   ngOnInit() {
     this.cargar();
   }
 
-  // Pide al back la página actual con el orden elegido.
   cargar() {
     this.cargando.set(true);
     this.errorCarga.set(null);
@@ -68,7 +62,6 @@ export class Publicaciones implements OnInit {
           this.publicaciones.set(res.publicaciones);
           this.total.set(res.total);
           this.cargando.set(false);
-          // Si borramos la ultima de una pagina, volvemos a la anterior
           if (!res.publicaciones.length && this.pagina() > 1) {
             this.irAPagina(this.pagina() - 1);
           }
@@ -80,37 +73,31 @@ export class Publicaciones implements OnInit {
       });
   }
 
-  // Cambia el orden y vuelve a la primera página.
   cambiarOrden(evento: Event) {
     this.orden.set((evento.target as HTMLSelectElement).value as OrdenPublicaciones);
     this.irAPagina(1);
   }
 
-  // Va a la página indicada y recarga.
   irAPagina(numero: number) {
     this.pagina.set(numero);
     this.cargar();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // True si la publicación es mía o si soy admin.
   puedeEliminar(post: Publicacion): boolean {
     return post.autor._id === this.auth.usuario()?._id || this.auth.esAdmin();
   }
 
-  // Da o saca el me gusta de una publicación.
   alternarMeGusta(post: Publicacion) {
     if (this.enProceso().has(post._id)) return;
     this.marcarEnProceso(post._id, true);
 
-    // Si ya le di me gusta -> DELETE, si no -> POST
     const peticion = post.leDiMeGusta
       ? this.publicacionesService.quitarMeGusta(post._id)
       : this.publicacionesService.darMeGusta(post._id);
 
     peticion.subscribe({
       next: (res) => {
-        // Actualizamos solo esa publicacion con lo que devolvio el back
         this.publicaciones.update((lista) =>
           lista.map((p) => (p._id === post._id ? { ...p, ...res } : p)),
         );
@@ -123,7 +110,6 @@ export class Publicaciones implements OnInit {
     });
   }
 
-  // Pide confirmación y elimina la publicación.
   eliminar(post: Publicacion) {
     this.modal.confirmar(
       '¿Eliminar publicación?',
@@ -142,11 +128,10 @@ export class Publicaciones implements OnInit {
     );
   }
 
-  // ----- Crear publicacion -----
   seleccionarImagen(evento: Event) {
     const input = evento.target as HTMLInputElement;
     const archivo = input.files?.[0];
-    input.value = ''; // permite volver a elegir el mismo archivo
+    input.value = '';
     if (!archivo) return;
 
     if (!archivo.type.startsWith('image/')) {
@@ -162,7 +147,6 @@ export class Publicaciones implements OnInit {
     this.vistaPrevia.set(URL.createObjectURL(archivo));
   }
 
-  // Saca la imagen elegida para la nueva publicación.
   quitarImagen() {
     const url = this.vistaPrevia();
     if (url) URL.revokeObjectURL(url);
@@ -170,7 +154,6 @@ export class Publicaciones implements OnInit {
     this.vistaPrevia.set(null);
   }
 
-  // Valida el formulario y crea la publicación.
   publicar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -191,7 +174,6 @@ export class Publicaciones implements OnInit {
         this.form.reset();
         this.quitarImagen();
         this.modal.exito('¡Publicado!', 'Tu publicación ya está visible.');
-        // Mostramos las mas recientes para que se vea la nueva arriba
         this.orden.set('fecha');
         this.irAPagina(1);
       },
@@ -202,13 +184,11 @@ export class Publicaciones implements OnInit {
     });
   }
 
-  // True si el campo tiene error y ya fue tocado.
   invalido(campo: 'titulo' | 'mensaje'): boolean {
     const control = this.form.controls[campo];
     return control.invalid && control.touched;
   }
 
-  // Marca o desmarca una publicación con un me gusta en curso.
   private marcarEnProceso(id: string, valor: boolean) {
     this.enProceso.update((actual) => {
       const nuevo = new Set(actual);

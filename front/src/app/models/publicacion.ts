@@ -1,6 +1,3 @@
-/** Tipos de datos de publicaciones, comentarios y respuestas del back. */
-// Formas de los datos que devuelve el back para publicaciones y comentarios
-
 export interface Autor {
   _id: string;
   nombre: string;
@@ -17,7 +14,6 @@ export interface Publicacion {
   autor: Autor;
   cantidadMeGusta: number;
   cantidadComentarios: number;
-  // Calculado por el back segun el usuario del token
   leDiMeGusta: boolean;
   createdAt: string;
 }

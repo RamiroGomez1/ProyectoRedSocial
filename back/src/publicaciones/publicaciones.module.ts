@@ -1,4 +1,3 @@
-/** Módulo de publicaciones: publicaciones, me gusta y comentarios. */
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema';

@@ -1,4 +1,3 @@
-/** Rutas de publicaciones: crear, listar, eliminar y me gusta. */
 import {
   BadRequestException,
   Body,
@@ -21,17 +20,15 @@ import { PublicacionesService } from './publicaciones.service';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
 
-// Todas las rutas necesitan estar logueado (token valido)
 @UseGuards(JwtAuthGuard)
 @Controller('publicaciones')
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) {}
 
-  // POST /api/publicaciones  (form-data: titulo, mensaje, imagen opcional) -> 201
   @Post()
   @UseInterceptors(
     FileInterceptor('imagen', {
-      limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+      limits: { fileSize: 5 * 1024 * 1024 },
       fileFilter: (req, archivo, callback) => {
         if (!archivo.mimetype.startsWith('image/')) {
           return callback(new BadRequestException('El archivo debe ser una imagen'), false);
@@ -48,7 +45,6 @@ export class PublicacionesController {
     return this.publicacionesService.crear(dto, usuario.sub, imagen);
   }
 
-  // GET /api/publicaciones?orden=fecha|meGusta&usuario=<id>&offset=0&limit=10
   @Get()
   listar(
     @Query() query: ListarPublicacionesDto,
@@ -57,7 +53,6 @@ export class PublicacionesController {
     return this.publicacionesService.listar(query, usuario.sub);
   }
 
-  // DELETE /api/publicaciones/:id  -> baja logica (autor o admin)
   @Delete(':id')
   eliminar(
     @Param('id', ParseMongoIdPipe) id: string,
@@ -66,7 +61,6 @@ export class PublicacionesController {
     return this.publicacionesService.eliminar(id, usuario);
   }
 
-  // POST /api/publicaciones/:id/me-gusta  -> 201
   @Post(':id/me-gusta')
   darMeGusta(
     @Param('id', ParseMongoIdPipe) id: string,
@@ -75,7 +69,6 @@ export class PublicacionesController {
     return this.publicacionesService.darMeGusta(id, usuario.sub);
   }
 
-  // DELETE /api/publicaciones/:id/me-gusta  -> 200
   @Delete(':id/me-gusta')
   quitarMeGusta(
     @Param('id', ParseMongoIdPipe) id: string,

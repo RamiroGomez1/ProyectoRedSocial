@@ -1,4 +1,3 @@
-/** Lógica de comentarios: listar paginado y crear. */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -15,7 +14,6 @@ export class ComentariosService {
     private readonly publicacionesService: PublicacionesService,
   ) {}
 
-  // Comentarios de una publicacion, los mas recientes primero, paginados
   async listar(publicacionId: string, paginacion: PaginacionDto) {
     await this.publicacionesService.buscarActiva(publicacionId);
     const filtro = { publicacion: new Types.ObjectId(publicacionId) };
@@ -34,7 +32,6 @@ export class ComentariosService {
     return { comentarios, total, offset: paginacion.offset, limit: paginacion.limit };
   }
 
-  // Crea un comentario y suma 1 al contador de la publicación.
   async crear(publicacionId: string, dto: CrearComentarioDto, autorId: string) {
     await this.publicacionesService.buscarActiva(publicacionId);
 

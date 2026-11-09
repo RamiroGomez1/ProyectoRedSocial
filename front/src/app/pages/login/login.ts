@@ -1,4 +1,3 @@
-/** Página de inicio de sesión. */
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -26,16 +25,13 @@ export class Login {
     password: ['', [Validators.required, passwordFuerte]],
   });
 
-  // true si el campo tiene error y el usuario ya lo toco
   invalido(campo: 'identificador' | 'password'): boolean {
     const control = this.form.controls[campo];
     return control.invalid && control.touched;
   }
 
-  // Valida el formulario y hace el login.
   enviar() {
     if (this.form.invalid) {
-      // Marca todo como tocado para que se vean los mensajes de error
       this.form.markAllAsTouched();
       return;
     }

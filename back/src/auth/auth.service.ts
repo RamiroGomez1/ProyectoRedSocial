@@ -1,4 +1,3 @@
-/** Lógica de autenticación: crea usuarios, valida el login y genera el token JWT. */
 import {
   ConflictException,
   ForbiddenException,
@@ -22,9 +21,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // Valida que no exista, encripta la contraseña, sube la foto y crea el usuario.
   async registro(dto: RegistroDto, imagen: Express.Multer.File) {
-    // 1. Correo y nombre de usuario tienen que ser unicos -> 409 Conflict
     const repetido = await this.usuariosService.campoRepetido(
       dto.correo,
       dto.nombreUsuario,
@@ -36,17 +33,14 @@ export class AuthService {
       throw new ConflictException('Ese nombre de usuario ya esta en uso');
     }
 
-    // 2. Encriptamos la contraseña (10 = "rondas" de hasheo)
     const passwordHasheada = await bcrypt.hash(dto.password, 10);
 
-    // 3. Subimos la foto a Cloudinary y nos quedamos con la URL
     const urlImagen = await this.cloudinaryService.subirImagen(
       imagen,
       'perfiles',
       400,
     );
 
-    // 4. Guardamos el usuario (perfil "usuario" por defecto)
     const usuario = await this.usuariosService.crear({
       ...dto,
       fechaNacimiento: new Date(dto.fechaNacimiento),
@@ -61,19 +55,15 @@ export class AuthService {
     };
   }
 
-  // Busca el usuario, compara la contraseña y devuelve sus datos con el token.
   async login(dto: LoginDto) {
     const usuario = await this.usuariosService.buscarParaLogin(
       dto.identificador,
     );
 
-    // Mismo mensaje si no existe o si la contraseña esta mal,
-    // asi no le damos pistas a alguien que intenta adivinar cuentas
     if (!usuario) {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
     }
 
-    // bcrypt hashea la contraseña recibida y la compara con la guardada
     const coincide = await bcrypt.compare(dto.password, usuario.password);
     if (!coincide) {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
@@ -90,7 +80,6 @@ export class AuthService {
     };
   }
 
-  // Firma un JWT con el id, el nombre de usuario y el perfil (vence a los 15 min)
   private generarToken(usuario: UsuarioDocument): string {
     const payload: PayloadToken = {
       sub: usuario._id.toString(),
@@ -100,7 +89,6 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  // Nunca devolvemos la contraseña (ni hasheada) en una respuesta
   private sinPassword(usuario: UsuarioDocument) {
     const { password, ...resto } = usuario.toObject();
     return resto;

@@ -1,4 +1,3 @@
-/** Página de perfil: mis datos y mis últimas 3 publicaciones. */
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -29,16 +28,10 @@ export class MiPerfil implements OnInit {
   protected cargando = signal(true);
   protected errorCarga = signal<string | null>(null);
 
-  // Al entrar a la página, carga las publicaciones.
   ngOnInit() {
     this.cargar();
   }
 
-  /**
-   * 1. Pide mis ultimas 3 publicaciones.
-   * 2. Para cada una pide sus comentarios (forkJoin = todas en paralelo).
-   * 3. Junta cada publicacion con sus comentarios.
-   */
   cargar() {
     const usuario = this.auth.usuario();
     if (!usuario) return;
@@ -53,7 +46,7 @@ export class MiPerfil implements OnInit {
           return forkJoin(
             res.publicaciones.map((publicacion) =>
               this.publicacionesService
-                .listarComentarios(publicacion._id, 0, 3)
+                .listarComentarios(publicacion._id, 0, 50)
                 .pipe(map((c) => ({ publicacion, comentarios: c.comentarios }))),
             ),
           );
@@ -71,7 +64,6 @@ export class MiPerfil implements OnInit {
       });
   }
 
-  // Da o saca el me gusta de una publicación.
   alternarMeGusta(post: Publicacion) {
     const peticion = post.leDiMeGusta
       ? this.publicacionesService.quitarMeGusta(post._id)
@@ -91,7 +83,6 @@ export class MiPerfil implements OnInit {
     });
   }
 
-  // Pide confirmación y elimina la publicación.
   eliminar(post: Publicacion) {
     this.modal.confirmar(
       '¿Eliminar publicación?',

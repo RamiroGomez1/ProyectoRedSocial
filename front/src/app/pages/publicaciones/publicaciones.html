@@ -14,7 +14,6 @@
       </label>
     </div>
 
-    <!-- Nueva publicacion -->
     <form class="card nueva" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
       <div class="campo">
         <input class="input" formControlName="titulo" placeholder="Título de tu publicación"
@@ -53,7 +52,6 @@
       </div>
     </form>
 
-    <!-- Listado -->
     @if (cargando()) {
       <div class="estado"><div class="spinner"></div>Cargando publicaciones...</div>
     } @else if (errorCarga(); as error) {
@@ -92,7 +90,6 @@
     }
   </section>
 
-  <!-- Tarjeta lateral con el usuario logueado -->
   @if (auth.usuario(); as u) {
     <aside class="card lateral">
       <img class="avatar" [src]="u.imagenPerfil" alt="" width="64" height="64" />

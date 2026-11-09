@@ -1,4 +1,3 @@
-/** Interceptor HTTP: agrega el token y maneja la sesión vencida. */
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -6,12 +5,6 @@ import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { ModalService } from '../services/modal.service';
 
-/**
- * Interceptor: se ejecuta en TODAS las peticiones HTTP.
- * 1. Agrega el header "Authorization: Bearer <token>" si hay sesion.
- * 2. Si el back responde 401 (token vencido o invalido), cierra la
- *    sesion y manda al login.
- */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const router = inject(Router);
@@ -24,7 +17,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(peticion).pipe(
     catchError((err: HttpErrorResponse) => {
-      // En /auth/login un 401 es "contraseña incorrecta", no sesion vencida
       const esRutaAuth = req.url.includes('/auth/');
       if (err.status === 401 && !esRutaAuth) {
         auth.cerrarSesion();
