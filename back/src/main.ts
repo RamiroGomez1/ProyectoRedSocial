@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { TrimPipe } from './common/pipes/trim.pipe';
 import * as dns from 'dns';
 
 if (dns.getServers().every((s) => s === '127.0.0.1' || s === '::1')) {
@@ -17,8 +18,10 @@ async function bootstrap() {
   app.enableCors({ origin: origenes, credentials: true });
 
   app.useGlobalPipes(
+    new TrimPipe(),
     new ValidationPipe({
       whitelist: true,
+      forbidNonWhitelisted: true,
       transform: true,
       stopAtFirstError: true,
     }),

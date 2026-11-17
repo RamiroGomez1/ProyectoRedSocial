@@ -1,0 +1,231 @@
+.contenedor {
+  max-width: 720px;
+}
+
+.volver {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.volver:hover {
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.principal {
+  padding: 24px 26px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.principal header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.autor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.autor strong {
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.editado {
+  color: var(--primario);
+  font-weight: 600;
+}
+
+.eliminar {
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 999px;
+  opacity: 0.55;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.eliminar:hover {
+  opacity: 1;
+  background: var(--error-suave);
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.mensaje {
+  margin: 0 0 18px;
+  font-size: 1.05rem;
+  color: #c9ced2;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.imagen {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  background: var(--superficie-alta);
+}
+
+.principal footer {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--borde);
+  padding-top: 12px;
+}
+
+.accion {
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--texto-suave);
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+span.accion {
+  cursor: default;
+}
+
+button.accion:hover:not(:disabled) {
+  background: var(--acento-suave);
+  color: var(--acento);
+}
+
+button.accion:disabled {
+  opacity: 0.6;
+}
+
+.accion.activa {
+  color: var(--acento);
+}
+
+.comentar {
+  padding: 20px 22px;
+  margin-bottom: 26px;
+}
+
+.comentar h2 {
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+
+.comentar .campo {
+  margin-bottom: 10px;
+}
+
+.comentar textarea {
+  min-height: 80px;
+}
+
+.pie-formulario {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titulo-seccion {
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cantidad {
+  background: var(--primario-suave);
+  color: var(--primario);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 2px 12px;
+  border-radius: 999px;
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comentario {
+  display: flex;
+  gap: 12px;
+  padding: 16px 18px;
+}
+
+.cuerpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cabecera {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+
+.texto {
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.editar {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primario);
+  cursor: pointer;
+}
+
+.editar:hover {
+  text-decoration: underline;
+}
+
+.acciones-edicion {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.acciones-edicion .btn {
+  padding: 8px 16px;
+}
+
+.cargar-mas {
+  margin-top: 16px;
+}

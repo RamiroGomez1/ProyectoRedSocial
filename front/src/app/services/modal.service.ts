@@ -7,6 +7,7 @@ export interface DatosModal {
   titulo: string;
   mensaje: string;
   textoBoton?: string;
+  peligroso?: boolean;
   alCerrar?: () => void;
   alConfirmar?: () => void;
 }
@@ -31,8 +32,14 @@ export class ModalService {
     this.abrir({ tipo: 'info', titulo, mensaje });
   }
 
-  confirmar(titulo: string, mensaje: string, alConfirmar: () => void, textoBoton = 'Confirmar') {
-    this.abrir({ tipo: 'confirmar', titulo, mensaje, alConfirmar, textoBoton });
+  confirmar(
+    titulo: string,
+    mensaje: string,
+    alConfirmar: () => void,
+    textoBoton = 'Confirmar',
+    peligroso = true,
+  ) {
+    this.abrir({ tipo: 'confirmar', titulo, mensaje, alConfirmar, textoBoton, peligroso });
   }
 
   aceptar() {

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Comentario, ComentarioDocument } from './schemas/comentario.schema';
@@ -44,6 +48,35 @@ export class ComentariosService {
 
     return this.comentarioModel
       .findById(creado._id)
+      .populate('autor', CAMPOS_AUTOR)
+      .lean();
+  }
+
+  async editar(
+    publicacionId: string,
+    comentarioId: string,
+    dto: CrearComentarioDto,
+    autorId: string,
+  ) {
+    await this.publicacionesService.buscarActiva(publicacionId);
+
+    const comentario = await this.comentarioModel.findOne({
+      _id: comentarioId,
+      publicacion: new Types.ObjectId(publicacionId),
+    });
+    if (!comentario) {
+      throw new NotFoundException('El comentario no existe');
+    }
+    if (comentario.autor.toString() !== autorId) {
+      throw new ForbiddenException('Solo podes editar tus propios comentarios');
+    }
+
+    comentario.mensaje = dto.mensaje;
+    comentario.modificado = true;
+    await comentario.save();
+
+    return this.comentarioModel
+      .findById(comentario._id)
       .populate('autor', CAMPOS_AUTOR)
       .lean();
   }

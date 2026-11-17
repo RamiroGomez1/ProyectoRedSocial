@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsuarioActual } from '../auth/decorators/usuario-actual.decorator';
 import { PayloadToken } from '../auth/interfaces/payload.interface';
@@ -27,5 +36,15 @@ export class ComentariosController {
     @UsuarioActual() usuario: PayloadToken,
   ) {
     return this.comentariosService.crear(id, dto, usuario.sub);
+  }
+
+  @Put(':comentarioId')
+  editar(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @Param('comentarioId', ParseMongoIdPipe) comentarioId: string,
+    @Body() dto: CrearComentarioDto,
+    @UsuarioActual() usuario: PayloadToken,
+  ) {
+    return this.comentariosService.editar(id, comentarioId, dto, usuario.sub);
   }
 }

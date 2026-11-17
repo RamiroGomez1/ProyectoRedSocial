@@ -31,6 +31,10 @@ export class PublicacionesService {
     return this.http.get<RespuestaPublicaciones>(this.url, { params });
   }
 
+  obtener(id: string): Observable<Publicacion> {
+    return this.http.get<Publicacion>(`${this.url}/${id}`);
+  }
+
   crear(datos: FormData): Observable<Publicacion> {
     return this.http.post<Publicacion>(this.url, datos);
   }
@@ -54,5 +58,16 @@ export class PublicacionesService {
 
   comentar(id: string, mensaje: string): Observable<Comentario> {
     return this.http.post<Comentario>(`${this.url}/${id}/comentarios`, { mensaje });
+  }
+
+  editarComentario(
+    id: string,
+    comentarioId: string,
+    mensaje: string,
+  ): Observable<Comentario> {
+    return this.http.put<Comentario>(
+      `${this.url}/${id}/comentarios/${comentarioId}`,
+      { mensaje },
+    );
   }
 }

@@ -74,6 +74,18 @@ export class PublicacionesService {
     };
   }
 
+  async obtener(id: string, usuarioActualId: string) {
+    const publicacion = await this.publicacionModel
+      .findOne({ _id: id, activa: true })
+      .populate('autor', CAMPOS_AUTOR)
+      .lean();
+
+    if (!publicacion) {
+      throw new NotFoundException('La publicación no existe o fue eliminada');
+    }
+    return this.formatear(publicacion, usuarioActualId);
+  }
+
   async eliminar(id: string, usuario: PayloadToken) {
     const publicacion = await this.buscarActiva(id);
 

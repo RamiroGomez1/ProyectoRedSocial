@@ -21,7 +21,12 @@
       @if (datos.tipo === 'confirmar') {
         <div class="botones">
           <button class="btn btn-secundario" (click)="modal.cerrar()">Cancelar</button>
-          <button class="btn btn-peligro" (click)="modal.aceptar()">
+          <button
+            class="btn"
+            [class.btn-peligro]="datos.peligroso !== false"
+            [class.btn-primario]="datos.peligroso === false"
+            (click)="modal.aceptar()"
+          >
             {{ datos.textoBoton ?? 'Confirmar' }}
           </button>
         </div>

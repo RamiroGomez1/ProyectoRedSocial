@@ -53,6 +53,14 @@ export class PublicacionesController {
     return this.publicacionesService.listar(query, usuario.sub);
   }
 
+  @Get(':id')
+  obtener(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @UsuarioActual() usuario: PayloadToken,
+  ) {
+    return this.publicacionesService.obtener(id, usuario.sub);
+  }
+
   @Delete(':id')
   eliminar(
     @Param('id', ParseMongoIdPipe) id: string,

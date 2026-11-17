@@ -56,6 +56,16 @@ h3 {
   hyphens: auto;
 }
 
+h3 a {
+  color: inherit;
+  font-weight: inherit;
+}
+
+h3 a:hover {
+  color: var(--primario);
+  text-decoration: none;
+}
+
 .mensaje {
   margin: 0 0 14px;
   color: #c9ced2;
@@ -93,13 +103,21 @@ footer {
   transition: background 0.15s, color 0.15s;
 }
 
-span.accion {
-  cursor: default;
+a.accion {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 button.accion:hover:not(:disabled) {
   background: var(--acento-suave);
   color: var(--acento);
+}
+
+a.accion:hover {
+  background: var(--primario-suave);
+  color: var(--primario);
+  text-decoration: none;
 }
 
 button.accion:disabled {

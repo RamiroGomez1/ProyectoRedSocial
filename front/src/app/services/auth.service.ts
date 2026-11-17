@@ -1,8 +1,13 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, catchError, finalize, map, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { RespuestaAuth, RespuestaPerfil, Usuario } from '../models/usuario';
+import {
+  RespuestaAuth,
+  RespuestaPerfil,
+  RespuestaToken,
+  Usuario,
+} from '../models/usuario';
 
 const CLAVE_USUARIO = 'usuario';
 const CLAVE_TOKEN = 'token';
@@ -15,6 +20,8 @@ export class AuthService {
 
   readonly usuario = signal<Usuario | null>(this.leerUsuarioGuardado());
   readonly token = signal<string | null>(localStorage.getItem(CLAVE_TOKEN));
+
+  readonly verificando = signal(true);
 
   readonly logueado = computed(() => !!this.token() && !!this.usuario());
   readonly esAdmin = computed(() => this.usuario()?.perfil === 'administrador');
@@ -29,6 +36,33 @@ export class AuthService {
     return this.http
       .post<RespuestaAuth>(`${this.url}/login`, { identificador, password })
       .pipe(tap((res) => this.guardarSesion(res)));
+  }
+
+  verificarSesion(): Observable<Usuario | null> {
+    if (!this.token()) {
+      this.verificando.set(false);
+      return of(null);
+    }
+
+    return this.http.post<RespuestaPerfil>(`${this.url}/autorizar`, {}).pipe(
+      map((res) => res.usuario),
+      tap((usuario) => this.guardarUsuario(usuario)),
+      catchError(() => {
+        this.cerrarSesion();
+        return of(null);
+      }),
+      finalize(() => this.verificando.set(false)),
+    );
+  }
+
+  refrescarToken(): Observable<string> {
+    return this.http.post<RespuestaToken>(`${this.url}/refrescar`, {}).pipe(
+      map((res) => res.token),
+      tap((token) => {
+        localStorage.setItem(CLAVE_TOKEN, token);
+        this.token.set(token);
+      }),
+    );
   }
 
   refrescarPerfil(): Observable<Usuario> {

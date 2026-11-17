@@ -78,6 +78,32 @@ export class AuthService {
     };
   }
 
+  async autorizar(payload: PayloadToken) {
+    const usuario = await this.usuariosService.buscarPorId(payload.sub);
+
+    if (!usuario.activo) {
+      throw new ForbiddenException('Tu usuario esta deshabilitado');
+    }
+
+    return {
+      mensaje: 'El token es valido',
+      usuario: this.sinPassword(usuario),
+    };
+  }
+
+  refrescar(payload: PayloadToken) {
+    const nuevoPayload: PayloadToken = {
+      sub: payload.sub,
+      nombreUsuario: payload.nombreUsuario,
+      perfil: payload.perfil,
+    };
+
+    return {
+      mensaje: 'Token renovado',
+      token: this.jwtService.sign(nuevoPayload),
+    };
+  }
+
   private generarToken(usuario: UsuarioDocument): string {
     const payload: PayloadToken = {
       sub: usuario._id.toString(),

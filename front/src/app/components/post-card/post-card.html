@@ -21,7 +21,9 @@
     }
   </header>
 
-  <h3>{{ post.titulo }}</h3>
+  <h3>
+    <a [routerLink]="['/publicaciones', post._id]">{{ post.titulo }}</a>
+  </h3>
   <p class="mensaje">{{ post.mensaje }}</p>
 
   @if (post.imagen) {
@@ -38,7 +40,9 @@
     >
       {{ post.leDiMeGusta ? '♥' : '♡' }} {{ post.cantidadMeGusta }} me gusta
     </button>
-    <span class="accion">💬 {{ post.cantidadComentarios }}</span>
+    <a class="accion" [routerLink]="['/publicaciones', post._id]">
+      💬 {{ post.cantidadComentarios }} comentarios
+    </a>
   </footer>
 
   @if (comentarios(); as lista) {

@@ -20,6 +20,11 @@ export interface RespuestaAuth {
   token: string;
 }
 
+export interface RespuestaToken {
+  mensaje: string;
+  token: string;
+}
+
 export interface RespuestaPerfil {
   mensaje?: string;
   usuario: Usuario;
