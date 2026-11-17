@@ -1,6 +1,6 @@
 <header class="navbar">
   <div class="interior">
-    <a routerLink="/publicaciones" class="logo">
+    <a [routerLink]="auth.logueado() ? '/publicaciones' : '/login'" class="logo">
       <img src="favicon.svg" alt="" width="32" height="32" />
       <span>Red Social</span>
     </a>
@@ -8,18 +8,26 @@
     <button
       class="hamburguesa"
       (click)="menuAbierto.set(!menuAbierto())"
+      [attr.aria-expanded]="menuAbierto()"
       aria-label="Abrir menú"
     >
-      ☰
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
 
     <nav [class.abierto]="menuAbierto()" (click)="menuAbierto.set(false)">
-      <a routerLink="/publicaciones" routerLinkActive="activo">Publicaciones</a>
-      <a routerLink="/mi-perfil" routerLinkActive="activo">Mi perfil</a>
-
       @if (auth.usuario(); as usuario) {
+        <a routerLink="/publicaciones" routerLinkActive="activo">Publicaciones</a>
+        <a routerLink="/mi-perfil" routerLinkActive="activo">Mi perfil</a>
+
         <span class="usuario">
-          <img class="avatar" [src]="usuario.imagenPerfil" alt="" width="30" height="30" />
+          <app-avatar
+            [url]="usuario.imagenPerfil"
+            [nombre]="usuario.nombre"
+            [apellido]="usuario.apellido"
+            [tamanio]="30"
+          />
           {{ '@' + usuario.nombreUsuario }}
         </span>
         <button class="btn btn-fantasma" (click)="cerrarSesion()">Salir</button>

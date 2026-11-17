@@ -2,16 +2,18 @@
 
 <article class="card post">
   <header>
-    @if (post.autor.imagenPerfil) {
-      <img class="avatar" [src]="post.autor.imagenPerfil" alt="" width="42" height="42" />
-    } @else {
-      <span class="avatar" style="width: 42px; height: 42px">
-        {{ iniciales(post.autor.nombre, post.autor.apellido) }}
-      </span>
-    }
+    <app-avatar
+      [url]="post.autor.imagenPerfil"
+      [nombre]="post.autor.nombre"
+      [apellido]="post.autor.apellido"
+      [tamanio]="44"
+    />
+
     <div class="autor">
       <strong>{{ post.autor.nombre }} {{ post.autor.apellido }}</strong>
-      <span class="meta">{{ '@' + post.autor.nombreUsuario }} · {{ post.createdAt | date: 'd MMM, HH:mm' }}</span>
+      <span class="meta">
+        {{ '@' + post.autor.nombreUsuario }} · {{ post.createdAt | date: 'd MMM, HH:mm' }}
+      </span>
     </div>
 
     @if (puedeEliminar()) {
@@ -28,7 +30,7 @@
 
   <footer>
     <button
-      class="accion"
+      class="accion me-gusta"
       [class.activa]="post.leDiMeGusta"
       [disabled]="procesando()"
       [attr.aria-pressed]="post.leDiMeGusta"

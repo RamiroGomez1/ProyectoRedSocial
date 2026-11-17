@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { Avatar } from '../../components/avatar/avatar';
 import { AuthService, mensajeDeError } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
 import { camposIguales, edadMinima, passwordFuerte } from '../../validators/validadores';
@@ -20,7 +21,7 @@ type CampoRegistro =
 
 @Component({
   selector: 'app-registro',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, Avatar],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
@@ -94,10 +95,7 @@ export class Registro {
 
   enviar() {
     this.enviado.set(true);
-    if (!this.imagen()) {
-      this.errorImagen.set('Elegí una foto de perfil.');
-    }
-    if (this.form.invalid || !this.imagen()) {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
@@ -111,16 +109,18 @@ export class Registro {
     datos.append('password', valores.password);
     datos.append('fechaNacimiento', valores.fechaNacimiento);
     datos.append('descripcion', valores.descripcion.trim());
-    datos.append('imagenPerfil', this.imagen()!);
+
+    const imagen = this.imagen();
+    if (imagen) datos.append('imagenPerfil', imagen);
 
     this.cargando.set(true);
     this.auth.registro(datos).subscribe({
       next: () => {
         this.cargando.set(false);
         this.modal.exito(
-          '¡Cuenta creada!',
-          'Tu usuario se registró correctamente. Ahora podés iniciar sesión.',
-          () => this.router.navigate(['/login']),
+          `¡Bienvenido, ${valores.nombre.trim()}!`,
+          'Tu cuenta se creó y ya iniciamos tu sesión.',
+          () => this.router.navigate(['/publicaciones']),
         );
       },
       error: (err: HttpErrorResponse) => {

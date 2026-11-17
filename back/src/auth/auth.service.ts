@@ -21,7 +21,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async registro(dto: RegistroDto, imagen: Express.Multer.File) {
+  async registro(dto: RegistroDto, imagen?: Express.Multer.File) {
     const repetido = await this.usuariosService.campoRepetido(
       dto.correo,
       dto.nombreUsuario,
@@ -35,11 +35,9 @@ export class AuthService {
 
     const passwordHasheada = await bcrypt.hash(dto.password, 10);
 
-    const urlImagen = await this.cloudinaryService.subirImagen(
-      imagen,
-      'perfiles',
-      400,
-    );
+    const urlImagen = imagen
+      ? await this.cloudinaryService.subirImagen(imagen, 'perfiles', 400)
+      : '';
 
     const usuario = await this.usuariosService.crear({
       ...dto,

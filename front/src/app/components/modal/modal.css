@@ -2,8 +2,8 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(20, 17, 38, 0.55);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,12 +32,12 @@
 }
 
 .icono.exito {
-  background: #dcfce7;
+  background: var(--exito-suave);
   color: var(--exito);
 }
 
 .icono.error {
-  background: #fee2e2;
+  background: var(--error-suave);
   color: var(--error);
 }
 
@@ -54,6 +54,7 @@ h2 {
 p {
   color: var(--texto-suave);
   margin: 0 0 24px;
+  overflow-wrap: anywhere;
 }
 
 @keyframes aparecer {
@@ -65,8 +66,8 @@ p {
 }
 
 .icono.confirmar {
-  background: #fef3c7;
-  color: #b45309;
+  background: var(--aviso-suave);
+  color: var(--aviso);
 }
 
 .botones {

@@ -1,5 +1,11 @@
 .post {
   padding: 20px 22px;
+  overflow: hidden;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.post:hover {
+  border-color: var(--borde-fuerte);
 }
 
 header {
@@ -16,36 +22,45 @@ header {
   min-width: 0;
 }
 
+.autor strong {
+  overflow-wrap: anywhere;
+}
+
 .meta {
   color: var(--texto-suave);
   font-size: 0.85rem;
+  overflow-wrap: anywhere;
 }
 
 .eliminar {
   background: none;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 8px;
-  opacity: 0.6;
+  padding: 8px 10px;
+  border-radius: 999px;
+  opacity: 0.55;
   transition: opacity 0.15s, background 0.15s;
 }
 
 .eliminar:hover {
   opacity: 1;
-  background: #fee2e2;
+  background: var(--error-suave);
 }
 
 h3 {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   margin-bottom: 6px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .mensaje {
   margin: 0 0 14px;
-  color: #3d3a52;
+  color: #c9ced2;
   white-space: pre-line;
+  overflow-wrap: anywhere;
   word-break: break-word;
 }
 
@@ -54,9 +69,9 @@ h3 {
   width: 100%;
   max-height: 460px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 14px;
-  background: var(--fondo);
+  background: var(--superficie-alta);
 }
 
 footer {
@@ -72,9 +87,10 @@ footer {
   font: inherit;
   font-weight: 600;
   color: var(--texto-suave);
-  padding: 6px 12px;
-  border-radius: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
   cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
 span.accion {
@@ -82,7 +98,8 @@ span.accion {
 }
 
 button.accion:hover:not(:disabled) {
-  background: var(--fondo);
+  background: var(--acento-suave);
+  color: var(--acento);
 }
 
 button.accion:disabled {
@@ -104,11 +121,17 @@ button.accion:disabled {
 }
 
 .comentarios li {
-  background: var(--fondo);
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde);
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 0.92rem;
+  overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.comentarios strong {
+  color: var(--primario);
 }
 
 .comentarios .meta {

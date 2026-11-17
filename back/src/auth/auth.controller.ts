@@ -36,11 +36,8 @@ export class AuthController {
   )
   registro(
     @Body() dto: RegistroDto,
-    @UploadedFile() imagen: Express.Multer.File,
+    @UploadedFile() imagen?: Express.Multer.File,
   ) {
-    if (!imagen) {
-      throw new BadRequestException('La imagen de perfil es obligatoria');
-    }
     return this.authService.registro(dto, imagen);
   }
 

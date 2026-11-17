@@ -1,10 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Avatar } from '../avatar/avatar';
 import { Comentario, Publicacion } from '../../models/publicacion';
 
 @Component({
   selector: 'app-post-card',
-  imports: [DatePipe],
+  imports: [DatePipe, Avatar],
   templateUrl: './post-card.html',
   styleUrl: './post-card.css',
 })
@@ -16,8 +17,4 @@ export class PostCard {
 
   meGusta = output<Publicacion>();
   eliminar = output<Publicacion>();
-
-  iniciales(nombre: string, apellido: string): string {
-    return `${nombre[0] ?? ''}${apellido[0] ?? ''}`.toUpperCase();
-  }
 }

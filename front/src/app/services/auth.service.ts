@@ -1,8 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { RespuestaAuth, Usuario } from '../models/usuario';
+import { RespuestaAuth, RespuestaPerfil, Usuario } from '../models/usuario';
 
 const CLAVE_USUARIO = 'usuario';
 const CLAVE_TOKEN = 'token';
@@ -11,6 +11,7 @@ const CLAVE_TOKEN = 'token';
 export class AuthService {
   private http = inject(HttpClient);
   private url = `${environment.apiUrl}/auth`;
+  private urlUsuarios = `${environment.apiUrl}/usuarios`;
 
   readonly usuario = signal<Usuario | null>(this.leerUsuarioGuardado());
   readonly token = signal<string | null>(localStorage.getItem(CLAVE_TOKEN));
@@ -19,13 +20,31 @@ export class AuthService {
   readonly esAdmin = computed(() => this.usuario()?.perfil === 'administrador');
 
   registro(datos: FormData): Observable<RespuestaAuth> {
-    return this.http.post<RespuestaAuth>(`${this.url}/registro`, datos);
+    return this.http
+      .post<RespuestaAuth>(`${this.url}/registro`, datos)
+      .pipe(tap((res) => this.guardarSesion(res)));
   }
 
   login(identificador: string, password: string): Observable<RespuestaAuth> {
     return this.http
       .post<RespuestaAuth>(`${this.url}/login`, { identificador, password })
       .pipe(tap((res) => this.guardarSesion(res)));
+  }
+
+  refrescarPerfil(): Observable<Usuario> {
+    return this.http.get<RespuestaPerfil>(`${this.urlUsuarios}/mi-perfil`).pipe(
+      map((res) => res.usuario),
+      tap((usuario) => this.guardarUsuario(usuario)),
+    );
+  }
+
+  actualizarPerfil(datos: FormData): Observable<Usuario> {
+    return this.http
+      .patch<RespuestaPerfil>(`${this.urlUsuarios}/mi-perfil`, datos)
+      .pipe(
+        map((res) => res.usuario),
+        tap((usuario) => this.guardarUsuario(usuario)),
+      );
   }
 
   cerrarSesion() {
@@ -36,10 +55,14 @@ export class AuthService {
   }
 
   private guardarSesion(res: RespuestaAuth) {
-    localStorage.setItem(CLAVE_USUARIO, JSON.stringify(res.usuario));
     localStorage.setItem(CLAVE_TOKEN, res.token);
-    this.usuario.set(res.usuario);
     this.token.set(res.token);
+    this.guardarUsuario(res.usuario);
+  }
+
+  private guardarUsuario(usuario: Usuario) {
+    localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario));
+    this.usuario.set(usuario);
   }
 
   private leerUsuarioGuardado(): Usuario | null {

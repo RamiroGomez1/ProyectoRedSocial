@@ -2,8 +2,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--borde);
 }
 
@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .logo {
@@ -23,28 +24,30 @@
   gap: 10px;
   font-size: 1.3rem;
   font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--texto);
 }
 
 .logo:hover {
   text-decoration: none;
+  opacity: 0.9;
 }
 
 nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 nav a:not(.btn) {
   color: var(--texto-suave);
   padding: 8px 14px;
-  border-radius: 10px;
+  border-radius: 999px;
   font-weight: 600;
 }
 
 nav a:not(.btn):hover {
-  background: var(--fondo);
+  background: var(--hover);
   color: var(--texto);
   text-decoration: none;
 }
@@ -55,7 +58,7 @@ nav a.activo {
 }
 
 .boton-registro {
-  padding: 8px 16px;
+  padding: 8px 18px;
   margin-left: 6px;
 }
 
@@ -68,21 +71,41 @@ nav a.activo {
   align-items: center;
   gap: 8px;
   font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
   margin-left: 8px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
 }
 
 .hamburguesa {
   display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
   cursor: pointer;
-  color: var(--texto);
+}
+
+.hamburguesa span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  border-radius: 2px;
+  background: var(--texto);
 }
 
 @media (max-width: 720px) {
   .hamburguesa {
-    display: block;
+    display: flex;
   }
 
   nav {
@@ -93,9 +116,10 @@ nav a.activo {
     right: 0;
     flex-direction: column;
     align-items: stretch;
-    background: #fff;
+    gap: 6px;
+    background: #000;
     border-bottom: 1px solid var(--borde);
-    padding: 12px 20px 16px;
+    padding: 12px 20px 18px;
   }
 
   nav.abierto {

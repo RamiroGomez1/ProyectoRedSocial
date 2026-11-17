@@ -1,0 +1,136 @@
+@if (auth.usuario(); as u) {
+  <div class="contenedor">
+    <div class="card tarjeta">
+      <h1>Editar perfil</h1>
+      <p class="bajada">Actualizá tus datos y tu foto cuando quieras.</p>
+
+      <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+        <div class="foto">
+          @if (vistaPrevia(); as url) {
+            <img class="circulo" [src]="url" alt="Vista previa de la nueva foto" />
+          } @else {
+            <app-avatar
+              class="circulo"
+              [url]="u.imagenPerfil"
+              [nombre]="u.nombre"
+              [apellido]="u.apellido"
+              [tamanio]="92"
+            />
+          }
+          <div>
+            <div class="botones-foto">
+              <label for="imagen" class="btn btn-secundario">
+                {{ imagen() ? 'Elegir otra' : 'Cambiar foto' }}
+              </label>
+              @if (imagen()) {
+                <button type="button" class="btn btn-fantasma" (click)="quitarImagenNueva()">
+                  Cancelar
+                </button>
+              }
+            </div>
+            <input
+              id="imagen"
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="seleccionarImagen($event)"
+            />
+            <p class="ayuda">JPG, PNG o WEBP. Máximo 2 MB.</p>
+            @if (errorImagen(); as error) {
+              <span class="error-campo">{{ error }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="fila-2">
+          <div class="campo">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" class="input" formControlName="nombre"
+              [class.invalido]="invalido('nombre')" />
+            @if (invalido('nombre')) {
+              <span class="error-campo">
+                {{ tieneError('nombre', 'required') ? 'El nombre es obligatorio.' : 'Máximo 50 caracteres.' }}
+              </span>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" class="input" formControlName="apellido"
+              [class.invalido]="invalido('apellido')" />
+            @if (invalido('apellido')) {
+              <span class="error-campo">
+                {{ tieneError('apellido', 'required') ? 'El apellido es obligatorio.' : 'Máximo 50 caracteres.' }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" type="email" class="input" formControlName="correo"
+            [class.invalido]="invalido('correo')" />
+          @if (invalido('correo')) {
+            <span class="error-campo">
+              {{ tieneError('correo', 'required') ? 'El correo es obligatorio.' : 'Ingresá un correo válido.' }}
+            </span>
+          }
+        </div>
+
+        <div class="fila-2">
+          <div class="campo">
+            <label for="nombreUsuario">Nombre de usuario</label>
+            <input id="nombreUsuario" class="input" formControlName="nombreUsuario"
+              [class.invalido]="invalido('nombreUsuario')" />
+            @if (invalido('nombreUsuario')) {
+              <span class="error-campo">
+                @if (tieneError('nombreUsuario', 'required')) {
+                  Elegí un nombre de usuario.
+                } @else if (tieneError('nombreUsuario', 'pattern')) {
+                  Solo letras, números, punto y guion bajo.
+                } @else {
+                  Entre 3 y 20 caracteres.
+                }
+              </span>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input id="fechaNacimiento" type="date" class="input" formControlName="fechaNacimiento"
+              [class.invalido]="invalido('fechaNacimiento')" />
+            @if (invalido('fechaNacimiento')) {
+              <span class="error-campo">
+                @if (tieneError('fechaNacimiento', 'required')) {
+                  Ingresá tu fecha de nacimiento.
+                } @else if (tieneError('fechaNacimiento', 'fechaFutura')) {
+                  La fecha no puede ser futura.
+                } @else {
+                  Tenés que tener al menos 13 años.
+                }
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="descripcion">Descripción breve <span class="opcional">(opcional)</span></label>
+          <textarea id="descripcion" class="input" formControlName="descripcion" maxlength="200"
+            placeholder="Contá algo sobre vos..."></textarea>
+          <span class="ayuda contador">{{ form.controls.descripcion.value.length }}/200</span>
+        </div>
+
+        <div class="acciones">
+          <a routerLink="/mi-perfil" class="btn btn-fantasma">Cancelar</a>
+          <button type="submit" class="btn btn-primario" [disabled]="guardando()">
+            @if (guardando()) {
+              <span class="spinner"></span> Guardando...
+            } @else {
+              Guardar cambios
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

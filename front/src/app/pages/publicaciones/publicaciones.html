@@ -92,7 +92,12 @@
 
   @if (auth.usuario(); as u) {
     <aside class="card lateral">
-      <img class="avatar" [src]="u.imagenPerfil" alt="" width="64" height="64" />
+      <app-avatar
+        [url]="u.imagenPerfil"
+        [nombre]="u.nombre"
+        [apellido]="u.apellido"
+        [tamanio]="64"
+      />
       <strong>{{ u.nombre }} {{ u.apellido }}</strong>
       <span class="ayuda">{{ '@' + u.nombreUsuario }}</span>
       @if (u.descripcion) {

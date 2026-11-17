@@ -9,7 +9,11 @@
             @if (vistaPrevia(); as url) {
               <img [src]="url" alt="Vista previa de la foto de perfil" />
             } @else {
-              <span>📷</span>
+              <app-avatar
+                [nombre]="form.controls.nombre.value"
+                [apellido]="form.controls.apellido.value"
+                [tamanio]="80"
+              />
             }
           </label>
           <div>
@@ -17,7 +21,10 @@
               {{ imagen() ? 'Cambiar foto' : 'Subir foto de perfil' }}
             </label>
             <input id="imagen" type="file" accept="image/*" hidden (change)="seleccionarImagen($event)" />
-            <p class="ayuda">JPG, PNG o WEBP. Máximo 2 MB.</p>
+            <p class="ayuda">
+              Opcional. JPG, PNG o WEBP de hasta 2 MB. Si no subís ninguna, usamos un avatar
+              con tus iniciales.
+            </p>
             @if (errorImagen(); as error) {
               <span class="error-campo">{{ error }}</span>
             }

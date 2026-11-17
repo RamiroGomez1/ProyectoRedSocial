@@ -1,18 +1,30 @@
 :root {
-  --primario: #2563eb;
-  --primario-hover: #1d4ed8;
-  --primario-suave: #eff6ff;
-  --acento: #e11d48;
-  --exito: #16a34a;
-  --error: #dc2626;
-  --texto: #111827;
-  --texto-suave: #6b7280;
-  --borde: #e5e7eb;
-  --fondo: #f3f4f6;
-  --superficie: #ffffff;
-  --radio: 10px;
-  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --degradado: #2563eb;
+  --primario: #1d9bf0;
+  --primario-hover: #1a8cd8;
+  --primario-suave: rgba(29, 155, 240, 0.12);
+  --acento: #f91880;
+  --acento-suave: rgba(249, 24, 128, 0.12);
+  --exito: #00ba7c;
+  --exito-suave: rgba(0, 186, 124, 0.14);
+  --aviso: #ffd400;
+  --aviso-suave: rgba(255, 212, 0, 0.14);
+  --error: #f4212e;
+  --error-suave: rgba(244, 33, 46, 0.14);
+
+  --texto: #e7e9ea;
+  --texto-suave: #71767b;
+  --borde: #2f3336;
+  --borde-fuerte: #536471;
+  --fondo: #000000;
+  --superficie: #16181c;
+  --superficie-alta: #1c1f23;
+  --hover: rgba(239, 243, 244, 0.06);
+
+  --radio: 16px;
+  --radio-chico: 10px;
+  --sombra: 0 0 0 1px rgba(255, 255, 255, 0.02);
+  --marca: #1d9bf0;
+  --fuente: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 * {
@@ -26,11 +38,12 @@ body {
 }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: var(--fuente);
   background: var(--fondo);
   color: var(--texto);
   font-size: 15px;
   line-height: 1.5;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -46,7 +59,18 @@ a:hover {
 
 h1, h2, h3 {
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+::selection {
+  background: var(--primario);
+  color: #fff;
+}
+
+::placeholder {
+  color: var(--texto-suave);
 }
 
 .contenedor {
@@ -68,20 +92,21 @@ h1, h2, h3 {
   justify-content: center;
   gap: 8px;
   border: none;
-  border-radius: 10px;
-  padding: 11px 20px;
+  border-radius: 999px;
+  padding: 11px 22px;
   font: inherit;
   font-weight: 700;
+  letter-spacing: -0.01em;
   cursor: pointer;
-  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s, box-shadow 0.15s;
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
@@ -92,15 +117,17 @@ h1, h2, h3 {
 
 .btn-primario:hover:not(:disabled) {
   background: var(--primario-hover);
+  box-shadow: 0 0 0 4px var(--primario-suave);
 }
 
 .btn-secundario {
-  background: var(--primario-suave);
-  color: var(--primario);
+  background: transparent;
+  color: var(--texto);
+  box-shadow: inset 0 0 0 1px var(--borde-fuerte);
 }
 
 .btn-secundario:hover:not(:disabled) {
-  background: #dbeafe;
+  background: var(--hover);
 }
 
 .btn-fantasma {
@@ -109,7 +136,7 @@ h1, h2, h3 {
 }
 
 .btn-fantasma:hover:not(:disabled) {
-  background: var(--fondo);
+  background: var(--hover);
   color: var(--texto);
 }
 
@@ -119,7 +146,7 @@ h1, h2, h3 {
 }
 
 .btn-peligro:hover:not(:disabled) {
-  background: #b91c1c;
+  background: #d4121e;
 }
 
 .btn-bloque {
@@ -136,6 +163,7 @@ h1, h2, h3 {
 .campo label {
   font-weight: 600;
   font-size: 0.9rem;
+  color: var(--texto-suave);
 }
 
 .campo .opcional {
@@ -145,19 +173,23 @@ h1, h2, h3 {
 
 .input {
   width: 100%;
-  padding: 11px 14px;
-  border: 1.5px solid var(--borde);
-  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-chico);
   font: inherit;
   color: var(--texto);
-  background: #fff;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #000;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.input:hover:not(:focus) {
+  border-color: var(--borde-fuerte);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--primario);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 4px var(--primario-suave);
 }
 
 .input.invalido {
@@ -165,7 +197,17 @@ h1, h2, h3 {
 }
 
 .input.invalido:focus {
-  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+  box-shadow: 0 0 0 4px var(--error-suave);
+}
+
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371767b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-position: calc(100% - 12px) center;
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  padding-right: 36px;
+  cursor: pointer;
 }
 
 textarea.input {
@@ -174,7 +216,7 @@ textarea.input {
 }
 
 .error-campo {
-  color: var(--error);
+  color: #f4737d;
   font-size: 0.82rem;
   font-weight: 500;
 }
@@ -196,22 +238,10 @@ textarea.input {
   }
 }
 
-.avatar {
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--degradado);
-  color: #fff;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border: 2.5px solid rgba(255, 255, 255, 0.25);
   border-top-color: #fff;
   border-radius: 50%;
   animation: girar 0.7s linear infinite;
@@ -245,8 +275,13 @@ textarea.input {
 }
 
 .auth-card h2 {
-  font-size: 1.6rem;
-  margin-bottom: 24px;
+  font-size: 1.75rem;
+  margin-bottom: 6px;
+}
+
+.auth-card .bajada {
+  color: var(--texto-suave);
+  margin: 0 0 26px;
 }
 
 .auth-pie {
@@ -265,7 +300,7 @@ textarea.input {
 
 .con-boton .ver {
   position: absolute;
-  right: 4px;
+  right: 5px;
   top: 50%;
   transform: translateY(-50%);
   padding: 6px 12px;
@@ -273,7 +308,7 @@ textarea.input {
 }
 
 .con-boton .ver:active {
-  transform: translateY(-50%) scale(0.98);
+  transform: translateY(-50%) scale(0.97);
 }
 
 .estado {
@@ -286,7 +321,7 @@ textarea.input {
   width: 32px;
   height: 32px;
   border-width: 3px;
-  border-color: var(--primario-suave);
+  border-color: var(--borde);
   border-top-color: var(--primario);
   margin: 0 auto 12px;
 }

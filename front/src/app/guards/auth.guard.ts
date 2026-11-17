@@ -7,3 +7,9 @@ export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
   return auth.logueado() ? true : router.createUrlTree(['/login']);
 };
+
+export const invitadoGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  return auth.logueado() ? router.createUrlTree(['/publicaciones']) : true;
+};

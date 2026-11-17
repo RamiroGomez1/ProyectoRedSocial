@@ -4,16 +4,23 @@
       <div class="portada"></div>
 
       <div class="cabecera">
-        @if (u.imagenPerfil) {
-          <img class="avatar foto" [src]="u.imagenPerfil" alt="Foto de perfil" />
-        } @else {
-          <span class="avatar foto">{{ u.nombre[0] }}{{ u.apellido[0] }}</span>
-        }
+        <app-avatar
+          class="foto"
+          [url]="u.imagenPerfil"
+          [nombre]="u.nombre"
+          [apellido]="u.apellido"
+          [tamanio]="112"
+        />
         <div class="nombres">
           <h1>{{ u.nombre }} {{ u.apellido }}</h1>
           <span class="usuario">{{ '@' + u.nombreUsuario }}</span>
         </div>
-        <span class="perfil-tag" [class.admin]="u.perfil === 'administrador'">{{ u.perfil }}</span>
+        <div class="acciones">
+          @if (u.perfil === 'administrador') {
+            <span class="perfil-tag">Administrador</span>
+          }
+          <a routerLink="/editar-perfil" class="btn btn-secundario">Editar perfil</a>
+        </div>
       </div>
 
       @if (u.descripcion) {

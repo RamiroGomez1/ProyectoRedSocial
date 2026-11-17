@@ -1,7 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { forkJoin, map, of, switchMap } from 'rxjs';
+import { Avatar } from '../../components/avatar/avatar';
 import { PostCard } from '../../components/post-card/post-card';
 import { AuthService, mensajeDeError } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
@@ -15,7 +17,7 @@ interface PublicacionConComentarios {
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [DatePipe, PostCard],
+  imports: [DatePipe, RouterLink, Avatar, PostCard],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
 })
@@ -30,6 +32,7 @@ export class MiPerfil implements OnInit {
 
   ngOnInit() {
     this.cargar();
+    this.auth.refrescarPerfil().subscribe({ error: () => {} });
   }
 
   cargar() {

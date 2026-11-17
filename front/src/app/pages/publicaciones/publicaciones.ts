@@ -2,6 +2,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { Avatar } from '../../components/avatar/avatar';
 import { PostCard } from '../../components/post-card/post-card';
 import { ModalService } from '../../services/modal.service';
 import { AuthService, mensajeDeError } from '../../services/auth.service';
@@ -12,7 +13,7 @@ const TAMANIO_MAXIMO = 5 * 1024 * 1024;
 
 @Component({
   selector: 'app-publicaciones',
-  imports: [PostCard, ReactiveFormsModule, RouterLink],
+  imports: [PostCard, Avatar, ReactiveFormsModule, RouterLink],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css',
 })
