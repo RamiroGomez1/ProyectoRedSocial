@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { ModalService } from './modal.service';
 
-const MINUTOS_PARA_AVISAR = 10;
+const MINUTOS_PARA_AVISAR = 1;
 
 @Injectable({ providedIn: 'root' })
 export class SesionService {
@@ -31,7 +31,7 @@ export class SesionService {
   private avisarVencimiento() {
     this.modal.confirmar(
       'Tu sesión está por vencer',
-      'Te quedan 5 minutos de sesión. ¿Querés extenderla?',
+      'Te queda 1 minuto de sesión. ¿Querés extenderla?',
       () => this.extender(),
       'Extender sesión',
       false,
@@ -41,7 +41,7 @@ export class SesionService {
   private extender() {
     this.auth.refrescarToken().subscribe({
       next: () =>
-        this.modal.exito('Sesión extendida', 'Tenés 15 minutos más para seguir navegando.'),
+        this.modal.exito('Sesión extendida', 'Tenés 2 minutos más para seguir navegando.'),
       error: () => {
         this.auth.cerrarSesion();
         this.modal.info('Tu sesión expiró', 'Volvé a iniciar sesión para continuar.');
