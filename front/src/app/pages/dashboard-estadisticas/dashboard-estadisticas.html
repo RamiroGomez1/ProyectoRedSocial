@@ -1,0 +1,74 @@
+@if (cargando()) {
+  <div class="contenedor">
+    <div class="estado estado-pagina">
+      <div class="spinner"></div>
+      Cargando estadísticas...
+    </div>
+  </div>
+} @else if (errorCarga(); as error) {
+  <div class="contenedor">
+    <div class="card estado estado-pagina">
+      <p>{{ error }}</p>
+      <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
+    </div>
+  </div>
+} @else {
+  <div class="contenedor">
+    <div class="encabezado">
+      <div>
+        <h1 class="titulo-degradado">Estadísticas</h1>
+        <span class="ayuda">
+          {{ totalPublicaciones() | pluralizar: 'publicación' : 'publicaciones' }} y
+          {{ totalComentarios() | pluralizar: 'comentario' }} en el período elegido
+        </span>
+      </div>
+    </div>
+
+    <form class="card filtros" [formGroup]="form" (ngSubmit)="aplicar()">
+      <div class="campo">
+        <label for="desde">Desde</label>
+        <input id="desde" type="date" class="input" formControlName="desde" />
+      </div>
+      <div class="campo">
+        <label for="hasta">Hasta</label>
+        <input id="hasta" type="date" class="input" formControlName="hasta" />
+      </div>
+      <button type="submit" class="btn btn-primario">Aplicar</button>
+      <div class="atajos">
+        <button type="button" class="btn btn-fantasma" (click)="ultimos(7)">7 días</button>
+        <button type="button" class="btn btn-fantasma" (click)="ultimos(30)">30 días</button>
+        <button type="button" class="btn btn-fantasma" (click)="ultimos(90)">90 días</button>
+      </div>
+    </form>
+
+    <section class="card grafico">
+      <header>
+        <h2>Publicaciones por usuario</h2>
+        <span class="ayuda">Gráfico de barras · los {{ publicacionesPorUsuario().length }} más activos</span>
+      </header>
+      <app-grafico-barras
+        [datos]="publicacionesPorUsuario()"
+        titulo="Publicaciones por usuario"
+      />
+    </section>
+
+    <section class="card grafico">
+      <header>
+        <h2>Comentarios por día</h2>
+        <span class="ayuda">Gráfico de líneas · cómo se movió la actividad</span>
+      </header>
+      <app-grafico-lineas [datos]="comentariosPorDia()" titulo="Comentarios por día" />
+    </section>
+
+    <section class="card grafico">
+      <header>
+        <h2>Comentarios por publicación</h2>
+        <span class="ayuda">Gráfico de torta · dónde se concentraron los comentarios</span>
+      </header>
+      <app-grafico-torta
+        [datos]="comentariosPorPublicacion()"
+        titulo="Comentarios por publicación"
+      />
+    </section>
+  </div>
+}

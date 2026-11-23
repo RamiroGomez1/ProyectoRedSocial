@@ -12,7 +12,7 @@
     <div class="autor">
       <strong>{{ post.autor.nombre }} {{ post.autor.apellido }}</strong>
       <span class="meta">
-        {{ '@' + post.autor.nombreUsuario }} · {{ post.createdAt | date: 'd MMM, HH:mm' }}
+        {{ '@' + post.autor.nombreUsuario }} · {{ post.createdAt | tiempoRelativo }}
       </span>
     </div>
 
@@ -38,10 +38,10 @@
       [attr.aria-pressed]="post.leDiMeGusta"
       (click)="meGusta.emit(post)"
     >
-      {{ post.leDiMeGusta ? '♥' : '♡' }} {{ post.cantidadMeGusta }} me gusta
+      {{ post.leDiMeGusta ? '♥' : '♡' }} {{ post.cantidadMeGusta | pluralizar: 'me gusta' : 'me gusta' }}
     </button>
     <a class="accion" [routerLink]="['/publicaciones', post._id]">
-      💬 {{ post.cantidadComentarios }} comentarios
+      💬 {{ post.cantidadComentarios | pluralizar: 'comentario' }}
     </a>
   </footer>
 
@@ -53,7 +53,7 @@
             <strong>{{ '@' + comentario.autor.nombreUsuario }}</strong>
             {{ comentario.mensaje }}
             <span class="meta">
-              {{ comentario.createdAt | date: 'd MMM HH:mm' }}
+              {{ comentario.createdAt | tiempoRelativo }}
               @if (comentario.modificado) { · editado }
             </span>
           </li>

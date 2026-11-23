@@ -5,9 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { Usuario, UsuarioDocument } from './schemas/usuario.schema';
 import { ActualizarPerfilDto } from './dto/actualizar-perfil.dto';
+import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 
 @Injectable()
 export class UsuariosService {
@@ -96,6 +98,64 @@ export class UsuariosService {
       );
     }
 
+    await usuario.save();
+    return usuario;
+  }
+
+  async listarTodos(): Promise<UsuarioDocument[]> {
+    return this.usuarioModel.find().sort({ createdAt: -1 });
+  }
+
+  async crearComoAdmin(
+    dto: CrearUsuarioDto,
+    imagen?: Express.Multer.File,
+  ): Promise<UsuarioDocument> {
+    const repetido = await this.campoRepetido(dto.correo, dto.nombreUsuario);
+    if (repetido === 'correo') {
+      throw new ConflictException('Ya existe una cuenta con ese correo');
+    }
+    if (repetido === 'nombreUsuario') {
+      throw new ConflictException('Ese nombre de usuario ya esta en uso');
+    }
+
+    const passwordHasheada = await bcrypt.hash(dto.password, 10);
+
+    const urlImagen = imagen
+      ? await this.cloudinaryService.subirImagen(imagen, 'perfiles', 400)
+      : '';
+
+    const creado = await this.usuarioModel.create({
+      ...dto,
+      fechaNacimiento: new Date(dto.fechaNacimiento),
+      password: passwordHasheada,
+      imagenPerfil: urlImagen,
+    });
+
+    return this.buscarPorId(creado._id.toString());
+  }
+
+  async cambiarEstado(
+    id: string,
+    activo: boolean,
+    idDelAdmin: string,
+  ): Promise<UsuarioDocument> {
+    if (id === idDelAdmin) {
+      throw new ConflictException(
+        'No podés cambiar el estado de tu propio usuario',
+      );
+    }
+
+    const usuario = await this.buscarPorId(id);
+
+    if (usuario.activo === activo) {
+      throw new ConflictException(
+        activo
+          ? 'El usuario ya estaba habilitado'
+          : 'El usuario ya estaba deshabilitado',
+      );
+    }
+
+    usuario.activo = activo;
     await usuario.save();
     return usuario;
   }

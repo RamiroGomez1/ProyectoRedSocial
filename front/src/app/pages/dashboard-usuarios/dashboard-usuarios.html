@@ -1,0 +1,258 @@
+@if (cargando()) {
+  <div class="contenedor">
+    <div class="estado estado-pagina">
+      <div class="spinner"></div>
+      Cargando usuarios...
+    </div>
+  </div>
+} @else if (errorCarga(); as error) {
+  <div class="contenedor">
+    <div class="card estado estado-pagina">
+      <p>{{ error }}</p>
+      <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
+    </div>
+  </div>
+} @else {
+  <div class="contenedor">
+    <div class="encabezado">
+      <div>
+        <h1 class="titulo-degradado">Usuarios</h1>
+        <span class="ayuda">
+          {{ usuarios().length | pluralizar: 'usuario' }} ·
+          {{ activos() }} activos ·
+          {{ administradores() | pluralizar: 'administrador' : 'administradores' }}
+        </span>
+      </div>
+
+      <div class="acciones-encabezado">
+        <input
+          class="input busqueda"
+          type="search"
+          placeholder="Buscar por nombre, usuario o correo"
+          [value]="busqueda()"
+          (input)="filtrar($event)"
+          [appAutofoco]="100"
+        />
+        <button class="btn btn-primario" (click)="abrirFormulario()">+ Nuevo usuario</button>
+      </div>
+    </div>
+
+    @if (formAbierto()) {
+      <form class="card formulario" [formGroup]="form" (ngSubmit)="crear()" novalidate>
+        <h2>Crear un usuario nuevo</h2>
+
+        <div class="fila-2">
+          <div class="campo">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" class="input" formControlName="nombre"
+              [class.invalido]="invalido('nombre')" />
+            @if (invalido('nombre')) {
+              <span class="error-campo">
+                {{ tieneError('nombre', 'required') ? 'El nombre es obligatorio.' : 'Máximo 50 caracteres.' }}
+              </span>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" class="input" formControlName="apellido"
+              [class.invalido]="invalido('apellido')" />
+            @if (invalido('apellido')) {
+              <span class="error-campo">
+                {{ tieneError('apellido', 'required') ? 'El apellido es obligatorio.' : 'Máximo 50 caracteres.' }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" type="email" class="input" formControlName="correo"
+            placeholder="nombre@mail.com" [class.invalido]="invalido('correo')" />
+          @if (invalido('correo')) {
+            <span class="error-campo">
+              {{ tieneError('correo', 'required') ? 'El correo es obligatorio.' : 'Ingresá un correo válido.' }}
+            </span>
+          }
+        </div>
+
+        <div class="fila-2">
+          <div class="campo">
+            <label for="nombreUsuario">Nombre de usuario</label>
+            <input id="nombreUsuario" class="input" formControlName="nombreUsuario"
+              placeholder="ej: ana.lopez" [class.invalido]="invalido('nombreUsuario')" />
+            @if (invalido('nombreUsuario')) {
+              <span class="error-campo">
+                @if (tieneError('nombreUsuario', 'required')) {
+                  Elegí un nombre de usuario.
+                } @else if (tieneError('nombreUsuario', 'pattern')) {
+                  Solo letras, números, punto y guion bajo.
+                } @else {
+                  Entre 3 y 20 caracteres.
+                }
+              </span>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="fechaNacimiento">Fecha de nacimiento</label>
+            <input id="fechaNacimiento" type="date" class="input" formControlName="fechaNacimiento"
+              [class.invalido]="invalido('fechaNacimiento')" />
+            @if (invalido('fechaNacimiento')) {
+              <span class="error-campo">
+                @if (tieneError('fechaNacimiento', 'required')) {
+                  Ingresá la fecha de nacimiento.
+                } @else if (tieneError('fechaNacimiento', 'fechaFutura')) {
+                  La fecha no puede ser futura.
+                } @else {
+                  Tiene que tener al menos 13 años.
+                }
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="fila-2">
+          <div class="campo">
+            <label for="password">Contraseña</label>
+            <input id="password" type="password" class="input" formControlName="password"
+              autocomplete="new-password" [class.invalido]="invalido('password')" />
+            @if (invalido('password')) {
+              <span class="error-campo">
+                {{ tieneError('password', 'required') ? 'Ingresá una contraseña.' : 'Mínimo 8 caracteres, una mayúscula y un número.' }}
+              </span>
+            } @else {
+              <span class="ayuda">Mínimo 8 caracteres, una mayúscula y un número.</span>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="repetirPassword">Repetir contraseña</label>
+            <input id="repetirPassword" type="password" class="input" formControlName="repetirPassword"
+              autocomplete="new-password" [class.invalido]="invalido('repetirPassword')" />
+            @if (invalido('repetirPassword')) {
+              <span class="error-campo">
+                {{ tieneError('repetirPassword', 'required') ? 'Repetí la contraseña.' : 'Las contraseñas no coinciden.' }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="descripcion">Descripción breve <span class="opcional">(opcional)</span></label>
+          <textarea id="descripcion" class="input" formControlName="descripcion" maxlength="200"></textarea>
+        </div>
+
+        <fieldset class="perfiles">
+          <legend>Perfil del usuario</legend>
+          <label class="opcion">
+            <input type="radio" formControlName="perfil" value="usuario" />
+            <span>
+              <strong>Usuario</strong>
+              <span class="ayuda">Publica, comenta y da me gusta.</span>
+            </span>
+          </label>
+          <label class="opcion">
+            <input type="radio" formControlName="perfil" value="administrador" />
+            <span>
+              <strong>Administrador</strong>
+              <span class="ayuda">Además administra usuarios y ve estadísticas.</span>
+            </span>
+          </label>
+        </fieldset>
+
+        <div class="campo">
+          <label for="imagenPerfil" class="btn btn-secundario subir">
+            {{ imagen() ? 'Foto elegida: cambiar' : 'Subir foto de perfil (opcional)' }}
+          </label>
+          <input id="imagenPerfil" type="file" accept="image/*" hidden (change)="seleccionarImagen($event)" />
+          @if (errorImagen(); as error) {
+            <span class="error-campo">{{ error }}</span>
+          }
+        </div>
+
+        <div class="acciones-form">
+          <button type="button" class="btn btn-fantasma" (click)="cerrarFormulario()">Cancelar</button>
+          <button type="submit" class="btn btn-primario" [disabled]="creando()">
+            @if (creando()) {
+              <span class="spinner"></span> Creando...
+            } @else {
+              Crear usuario
+            }
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (!filtrados().length) {
+      <div class="card estado">
+        <p>No hay usuarios que coincidan con la búsqueda.</p>
+      </div>
+    } @else {
+      <div class="card tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th>Perfil</th>
+              <th>Alta</th>
+              <th>Estado</th>
+              <th class="derecha">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (usuario of filtrados(); track usuario._id) {
+              <tr appResaltar>
+                <td>
+                  <div class="persona">
+                    <app-avatar
+                      [url]="usuario.imagenPerfil"
+                      [nombre]="usuario.nombre"
+                      [apellido]="usuario.apellido"
+                      [tamanio]="38"
+                    />
+                    <div>
+                      <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong>
+                      <span class="ayuda">{{ '@' + usuario.nombreUsuario }}</span>
+                      @if (usuario.descripcion) {
+                        <span class="ayuda descripcion">{{ usuario.descripcion | recortar: 48 }}</span>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <td class="correo">{{ usuario.correo }}</td>
+                <td>
+                  <span class="etiqueta" [class.admin]="usuario.perfil === 'administrador'">
+                    {{ usuario.perfil }}
+                  </span>
+                </td>
+                <td class="ayuda">{{ usuario.createdAt | date: 'd MMM y' }}</td>
+                <td>
+                  <span class="estado-usuario" [class.inactivo]="!usuario.activo">
+                    {{ usuario.activo ? 'Activo' : 'Deshabilitado' }}
+                  </span>
+                </td>
+                <td class="derecha">
+                  @if (esYo(usuario)) {
+                    <span class="ayuda">Sos vos</span>
+                  } @else {
+                    <button
+                      class="btn"
+                      [class.btn-peligro]="usuario.activo"
+                      [class.btn-secundario]="!usuario.activo"
+                      [disabled]="enProceso().has(usuario._id)"
+                      (click)="cambiarEstado(usuario)"
+                    >
+                      {{ usuario.activo ? 'Deshabilitar' : 'Habilitar' }}
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+}

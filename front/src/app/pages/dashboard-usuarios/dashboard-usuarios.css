@@ -1,0 +1,177 @@
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.encabezado h1 {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.acciones-encabezado {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.busqueda {
+  width: 280px;
+}
+
+.formulario {
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+.formulario h2 {
+  font-size: 1.25rem;
+  margin-bottom: 18px;
+}
+
+.perfiles {
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-chico);
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.perfiles legend {
+  padding: 0 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.opcion input {
+  margin-top: 3px;
+  accent-color: var(--atardecer-violeta);
+}
+
+.opcion > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.subir {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.acciones-form {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.tabla {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th {
+  text-align: left;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+}
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--borde);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.derecha {
+  text-align: right;
+}
+
+.persona {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.persona > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.descripcion {
+  font-style: italic;
+}
+
+.correo {
+  color: var(--texto-suave);
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--hover);
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.etiqueta.admin {
+  background: rgba(155, 138, 214, 0.18);
+  color: #c9bdf0;
+}
+
+.estado-usuario {
+  font-weight: 700;
+  color: var(--exito);
+}
+
+.estado-usuario.inactivo {
+  color: var(--error);
+}
+
+td .btn {
+  padding: 7px 14px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 760px) {
+  .perfiles {
+    grid-template-columns: 1fr;
+  }
+
+  .busqueda {
+    width: 100%;
+  }
+
+  .acciones-encabezado {
+    width: 100%;
+  }
+}

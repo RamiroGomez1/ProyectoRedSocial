@@ -325,3 +325,94 @@ textarea.input {
   border-top-color: var(--primario);
   margin: 0 auto 12px;
 }
+
+/* ===== Estado de carga de pantalla completa ===== */
+.estado-pagina {
+  min-height: calc(100vh - 220px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* ===== Color temático: atardecer sobre el mar ===== */
+:root {
+  --atardecer: linear-gradient(135deg, #f7a28f 0%, #e98bb4 38%, #9b8ad6 70%, #5f9fc4 100%);
+  --atardecer-rosa: #f7a28f;
+  --atardecer-violeta: #9b8ad6;
+  --atardecer-mar: #5f9fc4;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 440px at 12% -10%, rgba(247, 162, 143, 0.16), transparent 62%),
+    radial-gradient(780px 420px at 88% 0%, rgba(155, 138, 214, 0.18), transparent 64%),
+    radial-gradient(900px 520px at 50% 108%, rgba(95, 159, 196, 0.12), transparent 62%);
+}
+
+.titulo-degradado {
+  background: var(--atardecer);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: fit-content;
+}
+
+/* ===== Fondos de login y registro ===== */
+.pagina-auth {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.pagina-auth::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center;
+}
+
+.pagina-auth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.48) 0%,
+    rgba(0, 0, 0, 0.72) 45%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+}
+
+.fondo-login::before {
+  background-image: url('/fondos/atardecer-rosa.webp');
+}
+
+.fondo-registro::before {
+  background-image: url('/fondos/atardecer-violeta.webp');
+}
+
+.pagina-auth .auth-card {
+  background: rgba(16, 18, 22, 0.78);
+  border-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.pagina-auth .auth-card h2 {
+  background: var(--atardecer);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: fit-content;
+}

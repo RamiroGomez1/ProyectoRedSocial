@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Avatar } from '../avatar/avatar';
+import { TiempoRelativoPipe } from '../../pipes/tiempo-relativo.pipe';
+import { PluralizarPipe } from '../../pipes/pluralizar.pipe';
 import { Comentario, Publicacion } from '../../models/publicacion';
 
 @Component({
   selector: 'app-post-card',
-  imports: [DatePipe, RouterLink, Avatar],
+  imports: [RouterLink, Avatar, TiempoRelativoPipe, PluralizarPipe],
   templateUrl: './post-card.html',
   styleUrl: './post-card.css',
 })

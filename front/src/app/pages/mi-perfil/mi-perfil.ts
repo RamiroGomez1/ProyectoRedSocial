@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { forkJoin, map, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { Avatar } from '../../components/avatar/avatar';
 import { PostCard } from '../../components/post-card/post-card';
 import { AuthService, mensajeDeError } from '../../services/auth.service';
@@ -32,20 +32,25 @@ export class MiPerfil implements OnInit {
 
   ngOnInit() {
     this.cargar();
-    this.auth.refrescarPerfil().subscribe({ error: () => {} });
   }
 
   cargar() {
     const usuario = this.auth.usuario();
-    if (!usuario) return;
+    if (!usuario) {
+      this.cargando.set(false);
+      return;
+    }
+
     this.cargando.set(true);
     this.errorCarga.set(null);
 
-    this.publicacionesService
+    const publicaciones = this.publicacionesService
       .listar({ usuario: usuario._id, orden: 'fecha', limit: 3 })
       .pipe(
         switchMap((res) => {
-          if (!res.publicaciones.length) return of([]);
+          if (!res.publicaciones.length) {
+            return of([] as PublicacionConComentarios[]);
+          }
           return forkJoin(
             res.publicaciones.map((publicacion) =>
               this.publicacionesService
@@ -54,17 +59,20 @@ export class MiPerfil implements OnInit {
             ),
           );
         }),
-      )
-      .subscribe({
-        next: (lista) => {
-          this.ultimas.set(lista);
-          this.cargando.set(false);
-        },
-        error: (err: HttpErrorResponse) => {
-          this.cargando.set(false);
-          this.errorCarga.set(mensajeDeError(err));
-        },
-      });
+      );
+
+    const perfil = this.auth.refrescarPerfil().pipe(catchError(() => of(null)));
+
+    forkJoin({ perfil, publicaciones }).subscribe({
+      next: ({ publicaciones: lista }) => {
+        this.ultimas.set(lista);
+        this.cargando.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.cargando.set(false);
+        this.errorCarga.set(mensajeDeError(err));
+      },
+    });
   }
 
   alternarMeGusta(post: Publicacion) {

@@ -1,109 +1,118 @@
-<div class="contenedor diseno">
-  <section class="columna-principal">
-    <div class="encabezado">
-      <div>
-        <h1>Publicaciones</h1>
-        <span class="ayuda">{{ total() }} {{ total() === 1 ? 'publicación' : 'publicaciones' }}</span>
-      </div>
-      <label class="orden">
-        Ordenar por
-        <select class="input" [value]="orden()" (change)="cambiarOrden($event)">
-          <option value="fecha">Más recientes</option>
-          <option value="meGusta">Más me gusta</option>
-        </select>
-      </label>
+@if (cargando()) {
+  <div class="contenedor">
+    <div class="estado estado-pagina">
+      <div class="spinner"></div>
+      Cargando publicaciones...
     </div>
-
-    <form class="card nueva" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
-      <div class="campo">
-        <input class="input" formControlName="titulo" placeholder="Título de tu publicación"
-          maxlength="100" [class.invalido]="invalido('titulo')" />
-        @if (invalido('titulo')) {
-          <span class="error-campo">El título es obligatorio.</span>
-        }
-      </div>
-      <div class="campo">
-        <textarea class="input" formControlName="mensaje" placeholder="¿Qué querés compartir?"
-          maxlength="1000" [class.invalido]="invalido('mensaje')"></textarea>
-        @if (invalido('mensaje')) {
-          <span class="error-campo">Escribí un mensaje.</span>
-        }
-      </div>
-
-      @if (vistaPrevia(); as url) {
-        <div class="preview">
-          <img [src]="url" alt="Vista previa" />
-          <button type="button" class="quitar" (click)="quitarImagen()" title="Quitar imagen">✕</button>
+  </div>
+} @else if (errorCarga(); as error) {
+  <div class="contenedor">
+    <div class="card estado estado-pagina">
+      <p>{{ error }}</p>
+      <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
+    </div>
+  </div>
+} @else {
+  <div class="contenedor diseno">
+    <section class="columna-principal">
+      <div class="encabezado">
+        <div>
+          <h1 class="titulo-degradado">Publicaciones</h1>
+          <span class="ayuda">{{ total() }} {{ total() === 1 ? 'publicación' : 'publicaciones' }}</span>
         </div>
-      }
-
-      <div class="acciones-nueva">
-        <label class="btn btn-fantasma">
-          🖼️ {{ imagen() ? 'Cambiar imagen' : 'Agregar imagen' }}
-          <input type="file" accept="image/*" hidden (change)="seleccionarImagen($event)" />
+        <label class="orden">
+          Ordenar por
+          <select class="input" [value]="orden()" (change)="cambiarOrden($event)">
+            <option value="fecha">Más recientes</option>
+            <option value="meGusta">Más me gusta</option>
+          </select>
         </label>
-        <button class="btn btn-primario" type="submit" [disabled]="publicando()">
-          @if (publicando()) {
-            <span class="spinner"></span> Publicando...
-          } @else {
-            Publicar
+      </div>
+
+      <form class="card nueva" [formGroup]="form" (ngSubmit)="publicar()" novalidate>
+        <div class="campo">
+          <input class="input" formControlName="titulo" placeholder="Título de tu publicación"
+            maxlength="100" [class.invalido]="invalido('titulo')" />
+          @if (invalido('titulo')) {
+            <span class="error-campo">El título es obligatorio.</span>
           }
-        </button>
-      </div>
-    </form>
+        </div>
+        <div class="campo">
+          <textarea class="input" formControlName="mensaje" placeholder="¿Qué querés compartir?"
+            maxlength="1000" [class.invalido]="invalido('mensaje')"></textarea>
+          @if (invalido('mensaje')) {
+            <span class="error-campo">Escribí un mensaje.</span>
+          }
+        </div>
 
-    @if (cargando()) {
-      <div class="estado"><div class="spinner"></div>Cargando publicaciones...</div>
-    } @else if (errorCarga(); as error) {
-      <div class="card estado">
-        <p>{{ error }}</p>
-        <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
-      </div>
-    } @else if (!publicaciones().length) {
-      <div class="card estado">
-        <p>Todavía no hay publicaciones. ¡Sé el primero en publicar algo!</p>
-      </div>
-    } @else {
-      <div class="lista">
-        @for (post of publicaciones(); track post._id) {
-          <app-post-card
-            [publicacion]="post"
-            [puedeEliminar]="puedeEliminar(post)"
-            [procesando]="enProceso().has(post._id)"
-            (meGusta)="alternarMeGusta($event)"
-            (eliminar)="eliminar($event)"
-          />
+        @if (vistaPrevia(); as url) {
+          <div class="preview">
+            <img [src]="url" alt="Vista previa" />
+            <button type="button" class="quitar" (click)="quitarImagen()" title="Quitar imagen">✕</button>
+          </div>
         }
-      </div>
 
-      @if (totalPaginas() > 1) {
-        <nav class="paginacion">
-          <button class="btn btn-secundario" [disabled]="pagina() === 1" (click)="irAPagina(pagina() - 1)">
-            ← Anterior
+        <div class="acciones-nueva">
+          <label class="btn btn-fantasma">
+            🖼️ {{ imagen() ? 'Cambiar imagen' : 'Agregar imagen' }}
+            <input type="file" accept="image/*" hidden (change)="seleccionarImagen($event)" />
+          </label>
+          <button class="btn btn-primario" type="submit" [disabled]="publicando()">
+            @if (publicando()) {
+              <span class="spinner"></span> Publicando...
+            } @else {
+              Publicar
+            }
           </button>
-          <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
-          <button class="btn btn-secundario" [disabled]="pagina() === totalPaginas()" (click)="irAPagina(pagina() + 1)">
-            Siguiente →
-          </button>
-        </nav>
+        </div>
+      </form>
+
+      @if (!publicaciones().length) {
+        <div class="card estado">
+          <p>Todavía no hay publicaciones. ¡Sé el primero en publicar algo!</p>
+        </div>
+      } @else {
+        <div class="lista">
+          @for (post of publicaciones(); track post._id) {
+            <app-post-card
+              [publicacion]="post"
+              [puedeEliminar]="puedeEliminar(post)"
+              [procesando]="enProceso().has(post._id)"
+              (meGusta)="alternarMeGusta($event)"
+              (eliminar)="eliminar($event)"
+            />
+          }
+        </div>
+
+        @if (totalPaginas() > 1) {
+          <nav class="paginacion">
+            <button class="btn btn-secundario" [disabled]="pagina() === 1" (click)="irAPagina(pagina() - 1)">
+              ← Anterior
+            </button>
+            <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+            <button class="btn btn-secundario" [disabled]="pagina() === totalPaginas()" (click)="irAPagina(pagina() + 1)">
+              Siguiente →
+            </button>
+          </nav>
+        }
       }
+    </section>
+
+    @if (auth.usuario(); as u) {
+      <aside class="card lateral">
+        <app-avatar
+          [url]="u.imagenPerfil"
+          [nombre]="u.nombre"
+          [apellido]="u.apellido"
+          [tamanio]="64"
+        />
+        <strong>{{ u.nombre }} {{ u.apellido }}</strong>
+        <span class="ayuda">{{ '@' + u.nombreUsuario }}</span>
+        @if (u.descripcion) {
+          <p>{{ u.descripcion }}</p>
+        }
+        <a routerLink="/mi-perfil" class="btn btn-secundario btn-bloque">Ver mi perfil</a>
+      </aside>
     }
-  </section>
-
-  @if (auth.usuario(); as u) {
-    <aside class="card lateral">
-      <app-avatar
-        [url]="u.imagenPerfil"
-        [nombre]="u.nombre"
-        [apellido]="u.apellido"
-        [tamanio]="64"
-      />
-      <strong>{{ u.nombre }} {{ u.apellido }}</strong>
-      <span class="ayuda">{{ '@' + u.nombreUsuario }}</span>
-      @if (u.descripcion) {
-        <p>{{ u.descripcion }}</p>
-      }
-      <a routerLink="/mi-perfil" class="btn btn-secundario btn-bloque">Ver mi perfil</a>
-    </aside>
-  }
-</div>
+  </div>
+}

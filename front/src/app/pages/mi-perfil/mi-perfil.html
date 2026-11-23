@@ -1,4 +1,18 @@
-@if (auth.usuario(); as u) {
+@if (cargando()) {
+  <div class="contenedor">
+    <div class="estado estado-pagina">
+      <div class="spinner"></div>
+      Cargando tu perfil...
+    </div>
+  </div>
+} @else if (errorCarga(); as error) {
+  <div class="contenedor">
+    <div class="card estado estado-pagina">
+      <p>{{ error }}</p>
+      <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
+    </div>
+  </div>
+} @else if (auth.usuario(); as u) {
   <div class="contenedor">
     <section class="card perfil">
       <div class="portada"></div>
@@ -45,14 +59,7 @@
 
     <h2 class="titulo-seccion">Mis últimas publicaciones</h2>
 
-    @if (cargando()) {
-      <div class="estado"><div class="spinner"></div>Cargando...</div>
-    } @else if (errorCarga(); as error) {
-      <div class="card estado">
-        <p>{{ error }}</p>
-        <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
-      </div>
-    } @else if (!ultimas().length) {
+    @if (!ultimas().length) {
       <div class="card estado">
         <p>Todavía no publicaste nada.</p>
       </div>

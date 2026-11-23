@@ -5,7 +5,10 @@ import { Publicaciones } from './pages/publicaciones/publicaciones';
 import { DetallePublicacion } from './pages/detalle-publicacion/detalle-publicacion';
 import { MiPerfil } from './pages/mi-perfil/mi-perfil';
 import { EditarPerfil } from './pages/editar-perfil/editar-perfil';
+import { DashboardUsuarios } from './pages/dashboard-usuarios/dashboard-usuarios';
+import { DashboardEstadisticas } from './pages/dashboard-estadisticas/dashboard-estadisticas';
 import { authGuard, invitadoGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'publicaciones', pathMatch: 'full' },
@@ -44,6 +47,23 @@ export const routes: Routes = [
     component: EditarPerfil,
     canActivate: [authGuard],
     title: 'Editar perfil · Red Social',
+  },
+  {
+    path: 'dashboard',
+    canActivate: [adminGuard],
+    children: [
+      { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+      {
+        path: 'usuarios',
+        component: DashboardUsuarios,
+        title: 'Usuarios · Red Social',
+      },
+      {
+        path: 'estadisticas',
+        component: DashboardEstadisticas,
+        title: 'Estadísticas · Red Social',
+      },
+    ],
   },
   { path: '**', redirectTo: 'publicaciones' },
 ];
