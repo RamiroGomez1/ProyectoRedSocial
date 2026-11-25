@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { ModalService } from './modal.service';
 
 const MINUTOS_PARA_AVISAR = 1;
+const MINUTOS_RESTANTES = 1;
 
 @Injectable({ providedIn: 'root' })
 export class SesionService {
@@ -22,6 +23,13 @@ export class SesionService {
   }
 
   private programarAviso() {
+    
+    this.temporizador = setTimeout(() => {
+    this.auth.cerrarSesion();
+    this.modal.info('Tu sesión expiró', 'Volvé a iniciar sesión para continuar.');
+    this.router.navigate(['/login']);
+  }, MINUTOS_RESTANTES * 60 * 1000);
+
     this.temporizador = setTimeout(
       () => this.avisarVencimiento(),
       MINUTOS_PARA_AVISAR * 60 * 1000,
