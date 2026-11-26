@@ -91,7 +91,7 @@ export class AuthService {
     };
   }
 
-  refrescar(payload: PayloadToken) {
+    refrescar(payload: PayloadToken) {
     const nuevoPayload: PayloadToken = {
       sub: payload.sub,
       nombreUsuario: payload.nombreUsuario,

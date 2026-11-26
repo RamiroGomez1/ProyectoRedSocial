@@ -22,14 +22,7 @@ export class SesionService {
     });
   }
 
-  private programarAviso() {
-    
-    this.temporizador = setTimeout(() => {
-    this.auth.cerrarSesion();
-    this.modal.info('Tu sesión expiró', 'Volvé a iniciar sesión para continuar.');
-    this.router.navigate(['/login']);
-  }, MINUTOS_RESTANTES * 60 * 1000);
-
+private programarAviso() {
     this.temporizador = setTimeout(
       () => this.avisarVencimiento(),
       MINUTOS_PARA_AVISAR * 60 * 1000,
@@ -37,6 +30,11 @@ export class SesionService {
   }
 
   private avisarVencimiento() {
+    this.temporizador = setTimeout(
+      () => this.expirar(),
+      MINUTOS_RESTANTES * 60 * 1000,
+    );
+
     this.modal.confirmar(
       'Tu sesión está por vencer',
       'Te queda 1 minuto de sesión. ¿Querés extenderla?',
@@ -46,15 +44,17 @@ export class SesionService {
     );
   }
 
+    private expirar() {
+    this.auth.cerrarSesion();
+    this.modal.info('Tu sesión expiró', 'Volvé a iniciar sesión para continuar.');
+    this.router.navigate(['/login']);
+  }
+
   private extender() {
     this.auth.refrescarToken().subscribe({
       next: () =>
         this.modal.exito('Sesión extendida', 'Tenés 2 minutos más para seguir navegando.'),
-      error: () => {
-        this.auth.cerrarSesion();
-        this.modal.info('Tu sesión expiró', 'Volvé a iniciar sesión para continuar.');
-        this.router.navigate(['/login']);
-      },
+      error: () => this.expirar(),
     });
   }
 
