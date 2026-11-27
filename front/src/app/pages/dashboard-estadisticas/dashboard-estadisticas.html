@@ -70,5 +70,44 @@
         titulo="Comentarios por publicación"
       />
     </section>
+
+    <section class="card grafico">
+      <header>
+        <h2>Ingresos por usuario</h2>
+        <span class="ayuda">
+          Gráfico de barras ·
+          {{ totalIngresos() | pluralizar: 'inicio de sesión' : 'inicios de sesión' }}
+          en el período
+        </span>
+      </header>
+      <app-grafico-barras
+        [datos]="ingresosPorUsuario()"
+        titulo="Ingresos por usuario"
+      />
+    </section>
+
+    <section class="card grafico">
+      <header>
+        <h2>Visitas a mi perfil</h2>
+        <span class="ayuda">
+          Gráfico de torta · {{ totalVisitas() | pluralizar: 'visita' }} de otros usuarios
+        </span>
+      </header>
+      <app-grafico-torta
+        [datos]="visitasAMiPerfil()"
+        titulo="Visitas a mi perfil"
+      />
+    </section>
+
+    <section class="card grafico">
+      <header>
+        <h2>Me gusta por día</h2>
+        <span class="ayuda">
+          Gráfico de líneas ·
+          {{ totalMeGusta() | pluralizar: 'me gusta' : 'me gusta' }} otorgados
+        </span>
+      </header>
+      <app-grafico-lineas [datos]="meGustaPorDia()" titulo="Me gusta por día" />
+    </section>
   </div>
 }

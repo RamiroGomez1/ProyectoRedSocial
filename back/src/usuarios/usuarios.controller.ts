@@ -67,6 +67,15 @@ export class UsuariosController {
     };
   }
 
+  @Get(':id/perfil')
+  async perfilDeUsuario(
+    @Param('id', ParseMongoIdPipe) id: string,
+    @UsuarioActual() visitante: PayloadToken,
+  ) {
+    const usuario = await this.usuariosService.perfilPublico(id, visitante.sub);
+    return { usuario };
+  }
+
   @Get()
   @UseGuards(AdminGuard)
   async listar() {

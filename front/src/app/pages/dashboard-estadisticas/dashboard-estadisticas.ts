@@ -13,6 +13,10 @@ import { EstadisticasService } from '../../services/estadisticas.service';
 const DIAS_POR_DEFECTO = 30;
 const TOPE_BARRAS = 8;
 
+function etiquetaDia(fecha: string): string {
+  return `${Number(fecha.slice(8))}/${Number(fecha.slice(5, 7))}`;
+}
+
 function aTexto(fecha: Date): string {
   const mes = `${fecha.getMonth() + 1}`.padStart(2, '0');
   const dia = `${fecha.getDate()}`.padStart(2, '0');
@@ -41,9 +45,15 @@ export class DashboardEstadisticas implements OnInit {
   protected publicacionesPorUsuario = signal<DatoGrafico[]>([]);
   protected comentariosPorDia = signal<DatoGrafico[]>([]);
   protected comentariosPorPublicacion = signal<DatoGrafico[]>([]);
+  protected ingresosPorUsuario = signal<DatoGrafico[]>([]);
+  protected visitasAMiPerfil = signal<DatoGrafico[]>([]);
+  protected meGustaPorDia = signal<DatoGrafico[]>([]);
 
   protected totalPublicaciones = signal(0);
   protected totalComentarios = signal(0);
+  protected totalIngresos = signal(0);
+  protected totalVisitas = signal(0);
+  protected totalMeGusta = signal(0);
 
   protected form = this.fb.nonNullable.group({
     desde: [aTexto(new Date(Date.now() - DIAS_POR_DEFECTO * 24 * 60 * 60 * 1000))],
@@ -64,8 +74,18 @@ export class DashboardEstadisticas implements OnInit {
       publicaciones: this.estadisticasService.publicacionesPorUsuario(rango),
       comentariosDia: this.estadisticasService.comentariosPorDia(rango),
       comentariosPost: this.estadisticasService.comentariosPorPublicacion(rango),
+      ingresos: this.estadisticasService.ingresosPorUsuario(rango),
+      visitas: this.estadisticasService.visitasAMiPerfil(rango),
+      meGusta: this.estadisticasService.meGustaPorDia(rango),
     }).subscribe({
-      next: ({ publicaciones, comentariosDia, comentariosPost }) => {
+      next: ({
+        publicaciones,
+        comentariosDia,
+        comentariosPost,
+        ingresos,
+        visitas,
+        meGusta,
+      }) => {
         this.publicacionesPorUsuario.set(
           publicaciones.datos.slice(0, TOPE_BARRAS).map((d) => ({
             etiqueta: `@${d.nombreUsuario}`,
@@ -78,7 +98,7 @@ export class DashboardEstadisticas implements OnInit {
 
         this.comentariosPorDia.set(
           comentariosDia.datos.map((d) => ({
-            etiqueta: `${Number(d.fecha.slice(8))}/${Number(d.fecha.slice(5, 7))}`,
+            etiqueta: etiquetaDia(d.fecha),
             valor: d.cantidad,
           })),
         );
@@ -91,6 +111,36 @@ export class DashboardEstadisticas implements OnInit {
             etiqueta: d.titulo,
             valor: d.cantidad,
           })),
+        );
+
+        this.ingresosPorUsuario.set(
+          ingresos.datos.slice(0, TOPE_BARRAS).map((d) => ({
+            etiqueta: `@${d.nombreUsuario}`,
+            valor: d.cantidad,
+          })),
+        );
+        this.totalIngresos.set(
+          ingresos.datos.reduce((suma, d) => suma + d.cantidad, 0),
+        );
+
+        this.visitasAMiPerfil.set(
+          visitas.datos.slice(0, TOPE_BARRAS).map((d) => ({
+            etiqueta: `@${d.nombreUsuario}`,
+            valor: d.cantidad,
+          })),
+        );
+        this.totalVisitas.set(
+          visitas.datos.reduce((suma, d) => suma + d.cantidad, 0),
+        );
+
+        this.meGustaPorDia.set(
+          meGusta.datos.map((d) => ({
+            etiqueta: etiquetaDia(d.fecha),
+            valor: d.cantidad,
+          })),
+        );
+        this.totalMeGusta.set(
+          meGusta.datos.reduce((suma, d) => suma + d.cantidad, 0),
         );
 
         this.cargando.set(false);

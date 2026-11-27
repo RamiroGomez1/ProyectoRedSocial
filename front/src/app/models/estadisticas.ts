@@ -22,6 +22,25 @@ export interface ComentariosPorPublicacion {
   cantidad: number;
 }
 
+export interface IngresosPorUsuario {
+  usuarioId: string;
+  nombreUsuario: string;
+  nombre: string;
+  cantidad: number;
+}
+
+export interface VisitasPorUsuario {
+  usuarioId: string;
+  nombreUsuario: string;
+  nombre: string;
+  cantidad: number;
+}
+
+export interface MeGustaPorDia {
+  fecha: string;
+  cantidad: number;
+}
+
 export interface RangoFechas {
   desde: string;
   hasta: string;

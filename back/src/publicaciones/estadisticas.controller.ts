@@ -1,6 +1,8 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
+import { UsuarioActual } from '../auth/decorators/usuario-actual.decorator';
+import { PayloadToken } from '../auth/interfaces/payload.interface';
 import { EstadisticasService } from './estadisticas.service';
 import { RangoFechasDto } from './dto/rango-fechas.dto';
 
@@ -22,5 +24,23 @@ export class EstadisticasController {
   @Get('comentarios-por-publicacion')
   comentariosPorPublicacion(@Query() query: RangoFechasDto) {
     return this.estadisticasService.comentariosPorPublicacion(query);
+  }
+
+  @Get('ingresos-por-usuario')
+  ingresosPorUsuario(@Query() query: RangoFechasDto) {
+    return this.estadisticasService.ingresosPorUsuario(query);
+  }
+
+  @Get('visitas-a-mi-perfil')
+  visitasAMiPerfil(
+    @Query() query: RangoFechasDto,
+    @UsuarioActual() usuario: PayloadToken,
+  ) {
+    return this.estadisticasService.visitasAMiPerfil(query, usuario.sub);
+  }
+
+  @Get('me-gusta-por-dia')
+  meGustaPorDia(@Query() query: RangoFechasDto) {
+    return this.estadisticasService.meGustaPorDia(query);
   }
 }

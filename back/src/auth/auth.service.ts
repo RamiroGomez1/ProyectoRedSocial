@@ -71,6 +71,8 @@ export class AuthService {
       throw new ForbiddenException('Tu usuario esta deshabilitado');
     }
 
+    await this.usuariosService.registrarIngreso(usuario._id.toString());
+
     return {
       mensaje: 'Inicio de sesion exitoso',
       usuario: this.sinPassword(usuario),

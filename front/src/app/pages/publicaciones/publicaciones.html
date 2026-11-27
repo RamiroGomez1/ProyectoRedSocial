@@ -84,16 +84,20 @@
           }
         </div>
 
-        @if (totalPaginas() > 1) {
-          <nav class="paginacion">
-            <button class="btn btn-secundario" [disabled]="pagina() === 1" (click)="irAPagina(pagina() - 1)">
-              ← Anterior
-            </button>
-            <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
-            <button class="btn btn-secundario" [disabled]="pagina() === totalPaginas()" (click)="irAPagina(pagina() + 1)">
-              Siguiente →
-            </button>
-          </nav>
+        <div #sentinela class="sentinela"></div>
+
+        @if (cargandoMas()) {
+          <div class="estado cargando-mas">
+            <span class="spinner"></span>
+            Cargando más publicaciones...
+          </div>
+        } @else if (errorMas(); as error) {
+          <div class="card estado cargando-mas">
+            <p>{{ error }}</p>
+            <button class="btn btn-secundario" (click)="cargarMas()">Reintentar</button>
+          </div>
+        } @else if (!quedanPublicaciones()) {
+          <p class="fin">Llegaste al final de las publicaciones.</p>
         }
       }
     </section>

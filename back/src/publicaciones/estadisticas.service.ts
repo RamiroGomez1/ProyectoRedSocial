@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Usuario, UsuarioDocument } from '../usuarios/schemas/usuario.schema';
+import { Ingreso, IngresoDocument } from '../usuarios/schemas/ingreso.schema';
+import {
+  VisitaPerfil,
+  VisitaPerfilDocument,
+} from '../usuarios/schemas/visita-perfil.schema';
+import { MeGusta, MeGustaDocument } from './schemas/me-gusta.schema';
 import { Publicacion, PublicacionDocument } from './schemas/publicacion.schema';
 import { Comentario, ComentarioDocument } from './schemas/comentario.schema';
 import { RangoFechasDto } from './dto/rango-fechas.dto';
@@ -22,6 +28,12 @@ export class EstadisticasService {
     private comentarioModel: Model<ComentarioDocument>,
     @InjectModel(Usuario.name)
     private usuarioModel: Model<UsuarioDocument>,
+    @InjectModel(Ingreso.name)
+    private ingresoModel: Model<IngresoDocument>,
+    @InjectModel(VisitaPerfil.name)
+    private visitaPerfilModel: Model<VisitaPerfilDocument>,
+    @InjectModel(MeGusta.name)
+    private meGustaModel: Model<MeGustaDocument>,
   ) {}
 
   async publicacionesPorUsuario(query: RangoFechasDto) {
@@ -100,6 +112,93 @@ export class EstadisticasService {
       },
       { $sort: { cantidad: -1, titulo: 1 } },
       { $limit: 10 },
+    ]);
+
+    return this.respuesta(rango, datos);
+  }
+
+  async ingresosPorUsuario(query: RangoFechasDto) {
+    const rango = this.resolverRango(query);
+
+    const datos = await this.ingresoModel.aggregate([
+      { $match: { createdAt: this.entre(rango) } },
+      { $group: { _id: '$usuario', cantidad: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: this.usuarioModel.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'usuario',
+        },
+      },
+      { $unwind: '$usuario' },
+      {
+        $project: {
+          _id: 0,
+          usuarioId: '$_id',
+          nombreUsuario: '$usuario.nombreUsuario',
+          nombre: { $concat: ['$usuario.nombre', ' ', '$usuario.apellido'] },
+          cantidad: 1,
+        },
+      },
+      { $sort: { cantidad: -1, nombreUsuario: 1 } },
+    ]);
+
+    return this.respuesta(rango, datos);
+  }
+
+  async visitasAMiPerfil(query: RangoFechasDto, usuarioId: string) {
+    const rango = this.resolverRango(query);
+    const perfil = new Types.ObjectId(usuarioId);
+
+    const datos = await this.visitaPerfilModel.aggregate([
+      {
+        $match: {
+          perfil,
+          visitante: { $ne: perfil },
+          createdAt: this.entre(rango),
+        },
+      },
+      { $group: { _id: '$visitante', cantidad: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: this.usuarioModel.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'usuario',
+        },
+      },
+      { $unwind: '$usuario' },
+      {
+        $project: {
+          _id: 0,
+          usuarioId: '$_id',
+          nombreUsuario: '$usuario.nombreUsuario',
+          nombre: { $concat: ['$usuario.nombre', ' ', '$usuario.apellido'] },
+          cantidad: 1,
+        },
+      },
+      { $sort: { cantidad: -1, nombreUsuario: 1 } },
+    ]);
+
+    return this.respuesta(rango, datos);
+  }
+
+  async meGustaPorDia(query: RangoFechasDto) {
+    const rango = this.resolverRango(query);
+
+    const datos = await this.meGustaModel.aggregate([
+      { $match: { createdAt: this.entre(rango) } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          },
+          cantidad: { $sum: 1 },
+        },
+      },
+      { $project: { _id: 0, fecha: '$_id', cantidad: 1 } },
+      { $sort: { fecha: 1 } },
     ]);
 
     return this.respuesta(rango, datos);

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Usuario } from '../models/usuario';
+import { RespuestaPerfilPublico, Usuario } from '../models/usuario';
 
 export interface RespuestaUsuarios {
   usuarios: Usuario[];
@@ -18,6 +18,10 @@ export interface RespuestaUsuario {
 export class UsuariosService {
   private http = inject(HttpClient);
   private url = `${environment.apiUrl}/usuarios`;
+
+  perfil(id: string): Observable<RespuestaPerfilPublico> {
+    return this.http.get<RespuestaPerfilPublico>(`${this.url}/${id}/perfil`);
+  }
 
   listar(): Observable<RespuestaUsuarios> {
     return this.http.get<RespuestaUsuarios>(this.url);

@@ -25,6 +25,12 @@ export interface RespuestaToken {
   token: string;
 }
 
+export type PerfilPublico = Omit<Usuario, 'correo'>;
+
+export interface RespuestaPerfilPublico {
+  usuario: PerfilPublico;
+}
+
 export interface RespuestaPerfil {
   mensaje?: string;
   usuario: Usuario;

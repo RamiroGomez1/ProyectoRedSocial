@@ -1,4 +1,13 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
@@ -23,18 +32,21 @@ export class Publicaciones implements OnInit {
   private publicacionesService = inject(PublicacionesService);
   protected auth = inject(AuthService);
 
-  protected readonly porPagina = 5;
+  protected readonly porTanda = 5;
   protected publicaciones = signal<Publicacion[]>([]);
   protected total = signal(0);
   protected orden = signal<OrdenPublicaciones>('fecha');
-  protected pagina = signal(1);
   protected cargando = signal(true);
+  protected cargandoMas = signal(false);
   protected errorCarga = signal<string | null>(null);
+  protected errorMas = signal<string | null>(null);
   protected enProceso = signal<Set<string>>(new Set());
 
-  protected totalPaginas = computed(() =>
-    Math.max(1, Math.ceil(this.total() / this.porPagina)),
+  protected quedanPublicaciones = computed(
+    () => this.publicaciones().length < this.total(),
   );
+
+  private sentinela = viewChild<ElementRef<HTMLElement>>('sentinela');
 
   protected publicando = signal(false);
   protected imagen = signal<File | null>(null);
@@ -44,6 +56,24 @@ export class Publicaciones implements OnInit {
     mensaje: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
+  constructor() {
+    effect((onCleanup) => {
+      const elemento = this.sentinela()?.nativeElement;
+      const cargadas = this.publicaciones().length;
+      if (!elemento || cargadas >= this.total()) return;
+
+      const observador = new IntersectionObserver(
+        (entradas) => {
+          if (entradas[0].isIntersecting) this.cargarMas();
+        },
+        { rootMargin: '200px' },
+      );
+
+      observador.observe(elemento);
+      onCleanup(() => observador.disconnect());
+    });
+  }
+
   ngOnInit() {
     this.cargar();
   }
@@ -51,21 +81,15 @@ export class Publicaciones implements OnInit {
   cargar() {
     this.cargando.set(true);
     this.errorCarga.set(null);
+    this.errorMas.set(null);
 
     this.publicacionesService
-      .listar({
-        orden: this.orden(),
-        offset: (this.pagina() - 1) * this.porPagina,
-        limit: this.porPagina,
-      })
+      .listar({ orden: this.orden(), offset: 0, limit: this.porTanda })
       .subscribe({
         next: (res) => {
           this.publicaciones.set(res.publicaciones);
           this.total.set(res.total);
           this.cargando.set(false);
-          if (!res.publicaciones.length && this.pagina() > 1) {
-            this.irAPagina(this.pagina() - 1);
-          }
         },
         error: (err: HttpErrorResponse) => {
           this.cargando.set(false);
@@ -74,15 +98,38 @@ export class Publicaciones implements OnInit {
       });
   }
 
-  cambiarOrden(evento: Event) {
-    this.orden.set((evento.target as HTMLSelectElement).value as OrdenPublicaciones);
-    this.irAPagina(1);
+  cargarMas() {
+    if (this.cargandoMas() || !this.quedanPublicaciones()) return;
+
+    this.cargandoMas.set(true);
+    this.errorMas.set(null);
+
+    this.publicacionesService
+      .listar({
+        orden: this.orden(),
+        offset: this.publicaciones().length,
+        limit: this.porTanda,
+      })
+      .subscribe({
+        next: (res) => {
+          this.publicaciones.update((lista) => {
+            const yaEstan = new Set(lista.map((p) => p._id));
+            const nuevas = res.publicaciones.filter((p) => !yaEstan.has(p._id));
+            return [...lista, ...nuevas];
+          });
+          this.total.set(res.total);
+          this.cargandoMas.set(false);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.cargandoMas.set(false);
+          this.errorMas.set(mensajeDeError(err));
+        },
+      });
   }
 
-  irAPagina(numero: number) {
-    this.pagina.set(numero);
-    this.cargar();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  cambiarOrden(evento: Event) {
+    this.orden.set((evento.target as HTMLSelectElement).value as OrdenPublicaciones);
+    this.volverAlInicio();
   }
 
   puedeEliminar(post: Publicacion): boolean {
@@ -118,8 +165,11 @@ export class Publicaciones implements OnInit {
       () => {
         this.publicacionesService.eliminar(post._id).subscribe({
           next: () => {
+            this.publicaciones.update((lista) =>
+              lista.filter((p) => p._id !== post._id),
+            );
+            this.total.update((cantidad) => Math.max(0, cantidad - 1));
             this.modal.exito('Listo', 'La publicación fue eliminada.');
-            this.cargar();
           },
           error: (err: HttpErrorResponse) =>
             this.modal.error('No se pudo eliminar', mensajeDeError(err)),
@@ -176,7 +226,7 @@ export class Publicaciones implements OnInit {
         this.quitarImagen();
         this.modal.exito('¡Publicado!', 'Tu publicación ya está visible.');
         this.orden.set('fecha');
-        this.irAPagina(1);
+        this.volverAlInicio();
       },
       error: (err: HttpErrorResponse) => {
         this.publicando.set(false);
@@ -188,6 +238,11 @@ export class Publicaciones implements OnInit {
   invalido(campo: 'titulo' | 'mensaje'): boolean {
     const control = this.form.controls[campo];
     return control.invalid && control.touched;
+  }
+
+  private volverAlInicio() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.cargar();
   }
 
   private marcarEnProceso(id: string, valor: boolean) {

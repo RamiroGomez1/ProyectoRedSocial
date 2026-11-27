@@ -4,6 +4,7 @@ import { Registro } from './pages/registro/registro';
 import { Publicaciones } from './pages/publicaciones/publicaciones';
 import { DetallePublicacion } from './pages/detalle-publicacion/detalle-publicacion';
 import { MiPerfil } from './pages/mi-perfil/mi-perfil';
+import { Perfil } from './pages/perfil/perfil';
 import { EditarPerfil } from './pages/editar-perfil/editar-perfil';
 import { DashboardUsuarios } from './pages/dashboard-usuarios/dashboard-usuarios';
 import { DashboardEstadisticas } from './pages/dashboard-estadisticas/dashboard-estadisticas';
@@ -41,6 +42,12 @@ export const routes: Routes = [
     component: MiPerfil,
     canActivate: [authGuard],
     title: 'Mi perfil · Red Social',
+  },
+  {
+    path: 'perfil/:id',
+    component: Perfil,
+    canActivate: [authGuard],
+    title: 'Perfil · Red Social',
   },
   {
     path: 'editar-perfil',

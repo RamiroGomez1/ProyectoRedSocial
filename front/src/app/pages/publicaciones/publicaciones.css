@@ -97,15 +97,25 @@
   gap: 16px;
 }
 
-.paginacion {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-top: 24px;
+.sentinela {
+  height: 1px;
+}
+
+.cargando-mas {
+  padding: 24px 20px;
+  margin-top: 8px;
+}
+
+.cargando-mas .spinner {
+  width: 26px;
+  height: 26px;
+}
+
+.fin {
+  text-align: center;
+  margin-top: 22px;
   color: var(--texto-suave);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .lateral {

@@ -34,8 +34,21 @@
   min-width: 0;
 }
 
-.autor strong {
+.foto {
+  display: inline-flex;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.nombre {
+  color: inherit;
+  font-weight: 700;
   overflow-wrap: anywhere;
+}
+
+.nombre:hover {
+  color: var(--primario);
+  text-decoration: none;
 }
 
 .meta {

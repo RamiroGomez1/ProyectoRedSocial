@@ -11,14 +11,18 @@
   } @else if (publicacion(); as post) {
     <article class="card principal">
       <header>
-        <app-avatar
-          [url]="post.autor.imagenPerfil"
-          [nombre]="post.autor.nombre"
-          [apellido]="post.autor.apellido"
-          [tamanio]="52"
-        />
+        <a class="foto" [routerLink]="['/perfil', post.autor._id]">
+          <app-avatar
+            [url]="post.autor.imagenPerfil"
+            [nombre]="post.autor.nombre"
+            [apellido]="post.autor.apellido"
+            [tamanio]="52"
+          />
+        </a>
         <div class="autor">
-          <strong>{{ post.autor.nombre }} {{ post.autor.apellido }}</strong>
+          <a class="nombre" [routerLink]="['/perfil', post.autor._id]">
+            {{ post.autor.nombre }} {{ post.autor.apellido }}
+          </a>
           <span class="meta">
             {{ '@' + post.autor.nombreUsuario }} ·
             {{ post.createdAt | date: 'd MMM y, HH:mm' }}
@@ -92,16 +96,20 @@
       <ul class="lista">
         @for (comentario of comentarios(); track comentario._id) {
           <li class="card comentario">
-            <app-avatar
-              [url]="comentario.autor.imagenPerfil"
-              [nombre]="comentario.autor.nombre"
-              [apellido]="comentario.autor.apellido"
-              [tamanio]="38"
-            />
+            <a class="foto" [routerLink]="['/perfil', comentario.autor._id]">
+              <app-avatar
+                [url]="comentario.autor.imagenPerfil"
+                [nombre]="comentario.autor.nombre"
+                [apellido]="comentario.autor.apellido"
+                [tamanio]="38"
+              />
+            </a>
 
             <div class="cuerpo">
               <div class="cabecera">
-                <strong>{{ comentario.autor.nombre }} {{ comentario.autor.apellido }}</strong>
+                <a class="nombre" [routerLink]="['/perfil', comentario.autor._id]">
+                  {{ comentario.autor.nombre }} {{ comentario.autor.apellido }}
+                </a>
                 <span class="meta">
                   {{ '@' + comentario.autor.nombreUsuario }} ·
                   {{ comentario.createdAt | date: 'd MMM y, HH:mm' }}

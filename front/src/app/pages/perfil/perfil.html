@@ -1,0 +1,83 @@
+@if (cargando()) {
+  <div class="contenedor">
+    <div class="estado estado-pagina">
+      <div class="spinner"></div>
+      Cargando perfil...
+    </div>
+  </div>
+} @else if (errorCarga(); as error) {
+  <div class="contenedor">
+    <div class="card estado estado-pagina">
+      <p>{{ error }}</p>
+      <button class="btn btn-secundario" (click)="cargar()">Reintentar</button>
+    </div>
+  </div>
+} @else if (usuario(); as u) {
+  <div class="contenedor">
+    <a routerLink="/publicaciones" class="volver">← Volver a publicaciones</a>
+
+    <section class="card perfil">
+      <div class="portada"></div>
+
+      <div class="cabecera">
+        <app-avatar
+          class="foto"
+          [url]="u.imagenPerfil"
+          [nombre]="u.nombre"
+          [apellido]="u.apellido"
+          [tamanio]="112"
+        />
+        <div class="nombres">
+          <h1>{{ u.nombre }} {{ u.apellido }}</h1>
+          <span class="usuario">{{ '@' + u.nombreUsuario }}</span>
+        </div>
+        <div class="acciones">
+          @if (u.perfil === 'administrador') {
+            <span class="perfil-tag">Administrador</span>
+          }
+          @if (!u.activo) {
+            <span class="baja-tag">Deshabilitado</span>
+          }
+        </div>
+      </div>
+
+      @if (u.descripcion) {
+        <p class="descripcion">{{ u.descripcion }}</p>
+      }
+
+      <dl class="datos">
+        <div>
+          <dt>Fecha de nacimiento</dt>
+          <dd>{{ u.fechaNacimiento | date: 'longDate' : 'UTC' }}</dd>
+        </div>
+        <div>
+          <dt>Miembro desde</dt>
+          <dd>{{ u.createdAt | date: 'MMMM y' }}</dd>
+        </div>
+        <div>
+          <dt>Perfil</dt>
+          <dd>{{ u.perfil === 'administrador' ? 'Administrador' : 'Usuario' }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <h2 class="titulo-seccion">Últimas publicaciones</h2>
+
+    @if (!ultimas().length) {
+      <div class="card estado">
+        <p>{{ u.nombre }} todavía no publicó nada.</p>
+      </div>
+    } @else {
+      <div class="lista">
+        @for (post of ultimas(); track post._id) {
+          <app-post-card
+            [publicacion]="post"
+            [puedeEliminar]="puedeEliminar(post)"
+            (meGusta)="alternarMeGusta($event)"
+            (eliminar)="eliminar($event)"
+          />
+        }
+      </div>
+    }
+  </div>
+}

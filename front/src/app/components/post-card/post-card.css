@@ -22,8 +22,20 @@ header {
   min-width: 0;
 }
 
-.autor strong {
+.foto {
+  display: inline-flex;
+  border-radius: 50%;
+}
+
+.autor .nombre {
+  color: inherit;
+  font-weight: 700;
   overflow-wrap: anywhere;
+}
+
+.autor .nombre:hover {
+  color: var(--primario);
+  text-decoration: none;
 }
 
 .meta {
@@ -148,7 +160,8 @@ button.accion:disabled {
   word-break: break-word;
 }
 
-.comentarios strong {
+.comentarios strong,
+.comentarios strong a {
   color: var(--primario);
 }
 

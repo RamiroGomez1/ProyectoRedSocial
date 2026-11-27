@@ -2,15 +2,19 @@
 
 <article class="card post">
   <header>
-    <app-avatar
-      [url]="post.autor.imagenPerfil"
-      [nombre]="post.autor.nombre"
-      [apellido]="post.autor.apellido"
-      [tamanio]="44"
-    />
+    <a class="foto" [routerLink]="['/perfil', post.autor._id]">
+      <app-avatar
+        [url]="post.autor.imagenPerfil"
+        [nombre]="post.autor.nombre"
+        [apellido]="post.autor.apellido"
+        [tamanio]="44"
+      />
+    </a>
 
     <div class="autor">
-      <strong>{{ post.autor.nombre }} {{ post.autor.apellido }}</strong>
+      <a class="nombre" [routerLink]="['/perfil', post.autor._id]">
+        {{ post.autor.nombre }} {{ post.autor.apellido }}
+      </a>
       <span class="meta">
         {{ '@' + post.autor.nombreUsuario }} · {{ post.createdAt | tiempoRelativo }}
       </span>
@@ -50,7 +54,11 @@
       <ul class="comentarios">
         @for (comentario of lista; track comentario._id) {
           <li>
-            <strong>{{ '@' + comentario.autor.nombreUsuario }}</strong>
+            <strong>
+              <a [routerLink]="['/perfil', comentario.autor._id]">
+                {{ '@' + comentario.autor.nombreUsuario }}
+              </a>
+            </strong>
             {{ comentario.mensaje }}
             <span class="meta">
               {{ comentario.createdAt | tiempoRelativo }}

@@ -10,6 +10,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { PayloadToken } from '../auth/interfaces/payload.interface';
 import { Perfil } from '../usuarios/schemas/usuario.schema';
 import { Publicacion, PublicacionDocument } from './schemas/publicacion.schema';
+import { MeGusta, MeGustaDocument } from './schemas/me-gusta.schema';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { ListarPublicacionesDto } from './dto/listar-publicaciones.dto';
 
@@ -20,6 +21,7 @@ export class PublicacionesService {
   constructor(
     @InjectModel(Publicacion.name)
     private publicacionModel: Model<PublicacionDocument>,
+    @InjectModel(MeGusta.name) private meGustaModel: Model<MeGustaDocument>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -111,6 +113,11 @@ export class PublicacionesService {
     if (resultado.modifiedCount === 0) {
       throw new ConflictException('Ya le diste me gusta a esta publicación');
     }
+    await this.meGustaModel.create({
+      publicacion: new Types.ObjectId(id),
+      usuario: uid,
+    });
+
     return this.estadoMeGusta(id, true);
   }
 
@@ -125,6 +132,11 @@ export class PublicacionesService {
     if (resultado.modifiedCount === 0) {
       throw new ConflictException('No le habías dado me gusta a esta publicación');
     }
+    await this.meGustaModel.deleteOne({
+      publicacion: new Types.ObjectId(id),
+      usuario: uid,
+    });
+
     return this.estadoMeGusta(id, false);
   }
 

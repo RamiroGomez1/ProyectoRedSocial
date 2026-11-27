@@ -4,10 +4,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { Usuario, UsuarioDocument } from './schemas/usuario.schema';
+import { Ingreso, IngresoDocument } from './schemas/ingreso.schema';
+import {
+  VisitaPerfil,
+  VisitaPerfilDocument,
+} from './schemas/visita-perfil.schema';
 import { ActualizarPerfilDto } from './dto/actualizar-perfil.dto';
 import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 
@@ -15,6 +20,9 @@ import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 export class UsuariosService {
   constructor(
     @InjectModel(Usuario.name) private usuarioModel: Model<UsuarioDocument>,
+    @InjectModel(Ingreso.name) private ingresoModel: Model<IngresoDocument>,
+    @InjectModel(VisitaPerfil.name)
+    private visitaPerfilModel: Model<VisitaPerfilDocument>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -58,6 +66,24 @@ export class UsuariosService {
     const usuario = await this.usuarioModel.findById(id);
     if (!usuario) throw new NotFoundException('El usuario no existe');
     return usuario;
+  }
+
+  async perfilPublico(id: string, visitanteId: string) {
+    const usuario = await this.buscarPorId(id);
+
+    if (id !== visitanteId) {
+      await this.visitaPerfilModel.create({
+        perfil: usuario._id,
+        visitante: new Types.ObjectId(visitanteId),
+      });
+    }
+
+    const { correo, password, ...publico } = usuario.toObject();
+    return publico;
+  }
+
+  async registrarIngreso(usuarioId: string) {
+    await this.ingresoModel.create({ usuario: new Types.ObjectId(usuarioId) });
   }
 
   async actualizarPerfil(
